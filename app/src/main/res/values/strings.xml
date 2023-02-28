@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">APIapplication</string>
+    <string name="et_text">Enter player/match ID…</string>
+    <string name="btn1_text">player</string>
+    <string name="btn2_text">match</string>
+    <string name="tv_err">an error occurred</string>
+    <string name="tv_default">results</string>
+    <string name="tvdesc">"player" button displays player\'s best heroes\n"matches" button displays 5 winner nicknames</string>
+</resources>

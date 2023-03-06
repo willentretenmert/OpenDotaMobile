@@ -46,17 +46,17 @@ class MainActivity : AppCompatActivity() {
                     Array<PlayerStats>::class.java
                 )
 
-                var i = 0
-                while (i <= 2) {
+                for (i in 0..2) {
                     getHeroNameByIndex(data, data2, i)
                     if (i == 0) {
                         binding.textView.append(
                             "\nMP: " + data2[i].games.toString() + "\n" +
-                                "WR: " + String.format(
+                                    "WR: " + String.format(
                                 "%.0f",
                                 data2[i].win.toDouble() / data2[i].games.toDouble() * 100
                             ) + "%"
-                    )}
+                        )
+                    }
                     if (i == 1) {
                         binding.textView2.append(
                             "\nMP: " + data2[i].games.toString() + "\n" +
@@ -64,7 +64,8 @@ class MainActivity : AppCompatActivity() {
                                 "%.0f",
                                 data2[i].win.toDouble() / data2[i].games.toDouble() * 100
                             ) + "%"
-                        )}
+                        )
+                    }
                     if (i == 2) {
                         binding.textView3.append(
                             "\nMP: " + data2[i].games.toString() + "\n" +
@@ -72,11 +73,12 @@ class MainActivity : AppCompatActivity() {
                                 "%.0f",
                                 data2[i].win.toDouble() / data2[i].games.toDouble() * 100
                             ) + "%"
-                        )}
-                    i++
+                        )
+                    }
                 }
             } else Toast.makeText(this, getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun getHeroNameByIndex(data: Array<Hero>, data2: Array<PlayerStats>, i: Int) {

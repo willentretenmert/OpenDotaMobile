@@ -17,7 +17,6 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val client = OkHttpClient()
     private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,32 +47,12 @@ class MainActivity : AppCompatActivity() {
 
                 for (i in 0..2) {
                     getHeroNameByIndex(data, data2, i)
-                    if (i == 0) {
-                        binding.textView.append(
-                            "\nMP: " + data2[i].games.toString() + "\n" +
-                                    "WR: " + String.format(
-                                "%.0f",
-                                data2[i].win.toDouble() / data2[i].games.toDouble() * 100
-                            ) + "%"
-                        )
-                    }
-                    if (i == 1) {
-                        binding.textView2.append(
-                            "\nMP: " + data2[i].games.toString() + "\n" +
-                                    "WR: " + String.format(
-                                "%.0f",
-                                data2[i].win.toDouble() / data2[i].games.toDouble() * 100
-                            ) + "%"
-                        )
-                    }
-                    if (i == 2) {
-                        binding.textView3.append(
-                            "\nMP: " + data2[i].games.toString() + "\n" +
-                                    "WR: " + String.format(
-                                "%.0f",
-                                data2[i].win.toDouble() / data2[i].games.toDouble() * 100
-                            ) + "%"
-                        )
+                    val appendix: String = "\nMP: " + data2[i].games.toString() + "\n" +
+                            "WR: " + String.format("%.0f", data2[i].win.toDouble() / data2[i].games.toDouble() * 100) + "%"
+                    when(i) {
+                        0 -> binding.textView.append(appendix)
+                        1 -> binding.textView2.append(appendix)
+                        2 -> binding.textView3.append(appendix)
                     }
                 }
             } else Toast.makeText(this, getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
@@ -84,12 +63,11 @@ class MainActivity : AppCompatActivity() {
     private fun getHeroNameByIndex(data: Array<Hero>, data2: Array<PlayerStats>, i: Int) {
         data.forEach { v ->
             if (v.id == data2[i].hero_id.toInt()) {
-                if (i == 0)
-                    binding.textView.text = v.localized_name
-                if (i == 1)
-                    binding.textView2.text = v.localized_name
-                if (i == 2)
-                    binding.textView3.text = v.localized_name
+                when(i) {
+                    0 -> binding.textView.text = v.localized_name
+                    1 -> binding.textView2.text = v.localized_name
+                    2 -> binding.textView3.text = v.localized_name
+                }
             }
         }
     }

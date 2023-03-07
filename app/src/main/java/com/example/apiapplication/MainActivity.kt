@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.button.setOnClickListener {
             if (binding.editText.text.isNotBlank()) {
-//                val id = "275690206"
                 val id = binding.editText.text
                 val policy = ThreadPolicy.Builder()
                     .permitAll()

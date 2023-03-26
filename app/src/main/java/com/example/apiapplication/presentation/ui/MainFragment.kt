@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -35,42 +36,48 @@ class MainFragment : Fragment() {
 
         viewModel.fetchHeroes()
 
-        binding.button.setOnClickListener {
-            if (binding.editText.text.isNotBlank()) {
-                val id = binding.editText.text.toString()
-                viewModel.fetchPlayerStats(id)
+        with(binding) {
+            button.setOnClickListener {
+                if (editText.text.isNotBlank()) {
+                    val id = editText.text.toString()
+                    viewModel.fetchPlayerStats(id)
 
-                viewModel.heroes.observe(viewLifecycleOwner) { data ->
-                    viewModel.playerStats.observe(viewLifecycleOwner) { data2 ->
-                        for (i in 0..2) {
-                            val heroName = viewModel.getHeroNameByIndex(data, data2, i)
-                            val appendix: String =
-                                "\nMP: " + data2[i].games.toString() + "\n" +
-                                        "WR: " + String.format(
-                                    "%.0f",
-                                    data2[i].win.toDouble() / data2[i].games.toDouble() * 100
-                                ) + "%"
-                            when (i) {
-                                0 -> {
-                                    binding.textView.text = heroName
-                                    binding.textView.append(appendix)
-                                }
-                                1 -> {
-                                    binding.textView2.text = heroName
-                                    binding.textView2.append(appendix)
-                                }
-                                2 -> {
-                                    binding.textView3.text = heroName
-                                    binding.textView3.append(appendix)
-                                }
-                            }
+                    observeData { heroIndex, heroName, appendix ->
+                        when (heroIndex) {
+                            0 -> textView.setTextAndAppend(heroName, appendix)
+                            1 -> textView2.setTextAndAppend(heroName, appendix)
+                            2 -> textView3.setTextAndAppend(heroName, appendix)
                         }
                     }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun observeData(onHeroDataReady: (Int, String, String) -> Unit) {
+        viewModel.heroes.observe(viewLifecycleOwner) { data ->
+            viewModel.playerStats.observe(viewLifecycleOwner) { data2 ->
+                for (i in 0..2) {
+                    val heroName = viewModel.getHeroNameByIndex(data, data2, i)
+                    val appendix = """
+                    |MP: ${data2[i].games}
+                    |WR: ${
+                        String.format(
+                            "%.0f",
+                            data2[i].win.toDouble() / data2[i].games.toDouble() * 100
+                        )
+                    }%""".trimMargin()
+                    onHeroDataReady(i, heroName, appendix)
+                }
+            }
+        }
+    }
+
+    private fun TextView.setTextAndAppend(text: String, appendix: String) {
+        this.text = text
+        this.append(appendix)
     }
 }
 

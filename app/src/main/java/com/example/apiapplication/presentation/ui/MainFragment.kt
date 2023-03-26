@@ -1,39 +1,53 @@
-package com.example.apiapplication
+package com.example.apiapplication.presentation.ui
 
 import android.os.Bundle
 import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.example.apiapplication.databinding.ActivityMainBinding
-import com.example.apiapplication.hero.Hero
-import com.example.apiapplication.hero.PlayerStats
+import androidx.fragment.app.Fragment
+import com.example.apiapplication.R
+import com.example.apiapplication.data.Hero
+import com.example.apiapplication.data.PlayerStats
+import com.example.apiapplication.databinding.FragmentMainBinding
 import com.google.gson.Gson
-import okhttp3.OkHttpClient
-import kotlinx.serialization.*
 import java.net.URL
 
+class MainFragment : Fragment() {
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
     private val gson = Gson()
+    //private val _binding : FragmentMainBinding? = null
+    //private val binding get() = _binding!!
+    private lateinit var binding: FragmentMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.button.setOnClickListener {
             if (binding.editText.text.isNotBlank()) {
                 val id = binding.editText.text
-                val policy = ThreadPolicy.Builder()
+                val policy = StrictMode.ThreadPolicy.Builder()
                     .permitAll()
                     .build()
                 StrictMode.setThreadPolicy(policy)
                 // 1068042013 - my id
                 // 275690206 - eugenesub id
                 // old response val, don't use until multiple usages created
-//                val response = URL("https://api.opendota.com/api/heroes").readText()
+                //val response = URL("https://api.opendota.com/api/heroes").readText()
 
                 val data = gson.fromJson(
                     URL("https://api.opendota.com/api/heroes").readText(),
@@ -54,9 +68,8 @@ class MainActivity : AppCompatActivity() {
                         2 -> binding.textView3.append(appendix)
                     }
                 }
-            } else Toast.makeText(this, getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun getHeroNameByIndex(data: Array<Hero>, data2: Array<PlayerStats>, i: Int) {
@@ -71,3 +84,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+

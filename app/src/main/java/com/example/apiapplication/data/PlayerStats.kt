@@ -1,4 +1,4 @@
-package com.example.apiapplication.hero
+package com.example.apiapplication.data
 
 import kotlinx.serialization.*
 import com.google.gson.annotations.SerializedName

@@ -19,14 +19,14 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -62,6 +62,7 @@ class MainFragment : Fragment() {
                 for (i in 0..2) {
                     val heroName = viewModel.getHeroNameByIndex(data, data2, i)
                     val appendix = """
+                        |
                     |MP: ${data2[i].games}
                     |WR: ${
                         String.format(

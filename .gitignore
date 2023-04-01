@@ -1,3 +1,4 @@
 
 *.properties
 local.properties
+.idea/misc.xml

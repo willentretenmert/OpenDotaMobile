@@ -6,15 +6,15 @@
     app:startDestination="@id/loginFragment">
 
 
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.apiapplication.presentation.ui.MainActivity"
+        android:label="MainActivity" />
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.apiapplication.presentation.ui.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.apiapplication.presentation.ui.MainActivity"
-        android:label="MainActivity" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.apiapplication.presentation.ui.LoginFragment"

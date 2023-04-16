@@ -30,8 +30,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-
-
     fun fetchPlayerStats(id: CharSequence) {
         viewModelScope.launch(Dispatchers.IO) {
             val data2 = gson.fromJson(

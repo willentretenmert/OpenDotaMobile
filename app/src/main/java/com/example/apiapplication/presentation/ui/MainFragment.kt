@@ -12,7 +12,7 @@ import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentMainBinding
 import com.example.apiapplication.presentation.viewmodel.MainViewModel
 
-class PlayerStatsFragment : Fragment() {
+class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: MainViewModel
@@ -81,4 +81,3 @@ class PlayerStatsFragment : Fragment() {
         this.append(appendix)
     }
 }
-

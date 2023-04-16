@@ -10,16 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentMainBinding
-import com.example.apiapplication.presentation.viewmodel.MainViewModel
+import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 
-class MainFragment : Fragment() {
+class PlayerStatsFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: PlayerStatsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this)[PlayerStatsViewModel::class.java]
     }
 
     override fun onCreateView(

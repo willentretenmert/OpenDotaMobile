@@ -9,9 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentLoginBinding
 
-
-
 class LoginFragment : Fragment() {
+
     private lateinit var binding : FragmentLoginBinding
 
     override fun onCreateView(

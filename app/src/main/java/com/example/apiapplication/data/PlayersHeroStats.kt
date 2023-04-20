@@ -3,7 +3,7 @@ package com.example.apiapplication.data
 import kotlinx.serialization.*
 import com.google.gson.annotations.SerializedName
 
-data class PlayerStats(
+data class PlayersHeroStats(
     @field:SerializedName("against_games")
     val against_games: Int,
     @field:SerializedName("against_win")

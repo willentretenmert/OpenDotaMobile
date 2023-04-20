@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
 
     private fun observeData(onHeroDataReady: (Int, String, String) -> Unit) {
         viewModel.heroes.observe(viewLifecycleOwner) { data ->
-            viewModel.playerStats.observe(viewLifecycleOwner) { data2 ->
+            viewModel.playersHeroStats.observe(viewLifecycleOwner) { data2 ->
                 for (i in 0..2) {
                     val heroName = viewModel.getHeroNameByIndex(data, data2, i)
                     val appendix = """

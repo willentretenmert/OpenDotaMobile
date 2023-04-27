@@ -16,9 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.282"
-
-        >
+        app:layout_constraintVertical_bias="0.266">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -35,16 +33,16 @@
                 android:autofillHints=""
                 android:background="@color/white"
                 android:ems="10"
-                android:fontFamily="@font/inter"
                 android:hint="@string/user_login"
                 android:inputType="textPersonName"
-                android:paddingStart="14sp" />
+                android:paddingStart="14sp"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="50sp"
             android:layout_gravity="center"
+            android:layout_marginBottom="10.dp"
             app:cardCornerRadius="10dp">
 
             <EditText
@@ -55,8 +53,26 @@
                 android:autofillHints=""
                 android:background="@color/white"
                 android:ems="10"
-                android:fontFamily="@font/inter"
                 android:hint="@string/password"
+                android:inputType="textPassword"
+                android:paddingStart="14sp"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="10dp">
+
+            <EditText
+                android:id="@+id/editTextPasswordAgain"
+                android:layout_width="300sp"
+                android:layout_height="50sp"
+                android:layout_gravity="center"
+                android:autofillHints=""
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="@string/password_again"
                 android:inputType="textPassword"
                 android:paddingStart="14sp" />
         </androidx.cardview.widget.CardView>
@@ -64,56 +80,53 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/login_button"
+        android:id="@+id/signup_button"
         android:layout_width="177sp"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:fontFamily="@font/inter_extrabold"
         android:gravity="center"
-        android:text="@string/btn_login"
+        android:fontFamily="@font/inter_extrabold"
+        android:text="@string/btn_sign_up"
         android:textColor="@color/textColors"
         app:backgroundTint="@color/buttonB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.081">
+        app:layout_constraintVertical_bias="0.095">
 
     </com.google.android.material.button.MaterialButton>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/signup_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/btn_sign_up"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:backgroundTint="@color/background"
-        app:fontFamily="@font/inter_extrabold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/First_time">
-
-    </com.google.android.material.textview.MaterialTextView>
 
     <TextView
         android:id="@+id/First_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/tv_signup_quote"
         android:fontFamily="@font/inter"
-        android:text="@string/tv_first_time"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/signup_button"
+        app:layout_constraintVertical_bias="0.003">
 
     </TextView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_login"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_extrabold"
+        app:backgroundTint="@color/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/First_time">
+
+    </com.google.android.material.textview.MaterialTextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

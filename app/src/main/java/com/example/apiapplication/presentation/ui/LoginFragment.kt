@@ -31,5 +31,8 @@ class LoginFragment : Fragment() {
                 if (login == "zxc" && password == "123") findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
             }
         }
+        binding.signupButton.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
+        }
     }
 }

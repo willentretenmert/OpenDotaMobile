@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="toolBarStyle" parent="">
+        <item name="fontFamily">@font/inter_extrabold</item>
+        <item name="android:fontFamily">@font/inter_extrabold</item>
+        <item name="android:shadowColor">@color/accentColor</item>
+        <item name="android:shadowDx">1.5</item>
+        <item name="android:shadowDy">1.3</item>
+        <item name="android:shadowRadius">1.6</item>
+    </style>
+
+
+</resources>
+
+

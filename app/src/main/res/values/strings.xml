@@ -6,9 +6,14 @@
     <string name="tv_err">an error occurred</string>
     <string name="tv_default">results</string>
     <string name="tv_desc">"player" button displays player\'s best heroes\n"matches" button displays 5 winner nicknames</string>
-    <string name="user_login">login</string>
-    <string name="password">password</string>
-    <string name="username">username</string>
+    <string name="user_login">Login</string>
+    <string name="password">Password</string>
+    <string name="password_again">Password again</string>
+    <string name="username">Username</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="log_out">Log Out</string>
+    <string name="log_out">Log out</string>
+    <string name="btn_login">Log in</string>
+    <string name="btn_sign_up">Sign up</string>
+    <string name="tv_first_time">First time?</string>
+    <string name="tv_signup_quote">Already have account?</string>
 </resources>

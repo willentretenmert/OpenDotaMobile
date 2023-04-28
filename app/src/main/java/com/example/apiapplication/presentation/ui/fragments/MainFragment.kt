@@ -1,4 +1,4 @@
-package com.example.apiapplication.presentation.ui
+package com.example.apiapplication.presentation.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

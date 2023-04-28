@@ -14,9 +14,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/hero">
-
-        </ImageView>
+            android:id="@+id/hero" />
 
         <TextView
             android:gravity="center"
@@ -26,8 +24,6 @@
             android:layout_margin="2dp"
             android:layout_weight="1"
             android:text="mode" />
-
-
 
         <TextView
             android:id="@+id/name"
@@ -46,6 +42,7 @@
             android:layout_margin="2dp"
             android:layout_weight="3"
             android:text="length" />
+
         <TextView
             android:gravity="center"
             android:id="@+id/kda"
@@ -54,5 +51,6 @@
             android:layout_margin="2dp"
             android:layout_weight="3"
             android:text="kda" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

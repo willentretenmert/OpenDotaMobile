@@ -12,6 +12,7 @@
     <color name="buttonB">#384148</color>
     <color name="textColors">#6CEEC7</color>
     <color name="barColor">#2A4659</color>
-    <color name="labelColor">#2A4659</color>
+    <color name="labelColor">#6CEE89</color>
     <color name="accentColor">#6CEE89</color>
+    <color name="bottomBarColor">#3E617A</color>
 </resources>

@@ -1,5 +1,9 @@
 package com.example.apiapplication.presentation.viewmodel
 
-class LoginViewModel {
-    
+import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
+import com.example.apiapplication.R
+
+class LoginViewModel : ViewModel() {
+
 }

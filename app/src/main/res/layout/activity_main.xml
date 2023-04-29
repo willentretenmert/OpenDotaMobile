@@ -6,11 +6,26 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container">
+        android:background="@color/background">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/barColor"
+            app:title="@string/app_name"
+            app:titleTextColor="@color/white"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
+            android:layout_marginBottom="?android:actionBarSize"
+            android:layout_marginTop="?android:actionBarSize"
             android:id="@+id/nav_host_fragment_activity_main"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
@@ -18,19 +33,22 @@
             app:defaultNavHost="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:navGraph="@navigation/mobile_navigation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
-            android:background="@color/barColor"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_gravity="start"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/bottomBarColor"
+            app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
-            app:menu="@menu/navigation_items"
-            app:layout_constraintBottom_toBottomOf="@+id/nav_host_fragment_activity_main"
+
+            android:visibility="invisible"
+
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/navigation_items" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

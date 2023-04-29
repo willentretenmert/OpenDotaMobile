@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.fragments.SearchFragment"
     android:background="@color/background"
+    android:layout_marginTop="?attr/actionBarSize"
     android:layout_marginBottom="?attr/actionBarSize">
 
     <TextView

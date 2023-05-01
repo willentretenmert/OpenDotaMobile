@@ -11,17 +11,17 @@
         android:layout_height="match_parent"
         android:background="@color/background">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:background="@color/barColor"
-            app:title="@string/app_name"
-            app:titleTextColor="@color/white"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/app_name"
+            app:titleTextAppearance="@style/OpenDota.Custom.ToolBar"
+            app:titleTextColor="@color/white" />
 
         <androidx.fragment.app.FragmentContainerView
             android:layout_marginBottom="?android:actionBarSize"
@@ -40,12 +40,11 @@
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
-            android:background="@color/bottomBarColor"
-            app:itemIconTint="@color/white"
+            app:itemBackground="@color/bottomBarColor"
             app:itemTextColor="@color/white"
-
-            android:visibility="invisible"
-
+            app:itemIconTint="@color/white"
+            app:itemActiveIndicatorStyle="@style/OpenDota.Custom.bottomNavIndicator"
+            app:itemPaddingTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

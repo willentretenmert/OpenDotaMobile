@@ -16,6 +16,7 @@ import com.example.apiapplication.presentation.ui.adapters.MyAdapter
 import com.example.apiapplication.presentation.viewmodel.MainViewModel
 
 class PlayerStatsFragment : Fragment()  {
+
     private lateinit var binding: FragmentPlayerstatsBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var recyclerView: RecyclerView

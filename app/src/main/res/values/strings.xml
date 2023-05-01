@@ -19,6 +19,8 @@
     <string name="menu_search">Search</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_favs">Favourites</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_tv1">Search via SteamID…</string>
+    <string name="player_btn">player</string>
+    <string name="match_btn">match</string>
+    <string name="hero_imageview_desc">hero image</string>
 </resources>

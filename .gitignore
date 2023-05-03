@@ -51,3 +51,5 @@ google-services.json
 .idea/misc.xml
 .idea/compiler.xml
 .idea/misc.xml
+*.properties
+local.properties

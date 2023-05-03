@@ -1,6 +1,6 @@
 *.iml
+*.properties
 .gradle
-/local.properties
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -12,7 +12,6 @@
 /captures
 .externalNativeBuild
 .cxx
-local.properties
 .idea/vcs.xml
 # Gradle files
 .gradle/
@@ -50,3 +49,5 @@ google-services.json
 .idea/misc.xml
 .idea/compiler.xml
 .idea/misc.xml
+*.properties
+local.properties

@@ -42,7 +42,7 @@
             android:textColor="@color/buttonTextColor"
             android:background="@drawable/button_background"
             android:fontFamily="@font/inter_extrabold"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="4dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10dp"

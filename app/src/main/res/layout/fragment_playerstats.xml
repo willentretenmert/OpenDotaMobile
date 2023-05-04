@@ -21,9 +21,10 @@
 
         <include
             android:id="@+id/item_playerstats"
-            layout="@layout/item_playerstats"/>
+            layout="@layout/item_playerstats" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             class="androidx.appcompat.app.AlertController$RecycleListView"
@@ -42,6 +43,16 @@
             android:background="@drawable/button_background"
             android:fontFamily="@font/inter_extrabold"
             android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            class="androidx.appcompat.app.AlertController$RecycleListView"
+            android:layout_width="match_parent"
+            android:layout_height="188dp"
+            tools:listitem="@layout/item_comment"
+            android:id="@+id/comments_recycler_view" />
 
     </LinearLayout>
 

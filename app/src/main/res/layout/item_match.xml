@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:contentPaddingRight="8dp"
-    app:contentPaddingLeft="8dp"
+    app:contentPaddingRight="12dp"
+    app:contentPaddingLeft="12dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+
+    app:cardUseCompatPadding="true"
+    android:backgroundTint="@color/itemBackground2">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +32,8 @@
             android:layout_height="35dp"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="outcome" />
+            android:text="outcome"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/score"
@@ -39,7 +42,8 @@
             android:layout_height="35dp"
             android:layout_margin="2dp"
             android:layout_weight="5"
-            android:text="score" />
+            android:text="score"
+            android:textColor="@color/white"/>
         <TextView
             android:gravity="center"
             android:id="@+id/mode"
@@ -47,7 +51,8 @@
             android:layout_height="35dp"
             android:layout_margin="2dp"
             android:layout_weight="3"
-            android:text="mode" />
+            android:text="mode"
+            android:textColor="@color/white"/>
 
         <TextView
             android:gravity="center"
@@ -56,7 +61,8 @@
             android:layout_height="35dp"
             android:layout_margin="2dp"
             android:layout_weight="3"
-            android:text="length" />
+            android:text="length"
+            android:textColor="@color/white"/>
 
 
 

@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
-import com.example.apiapplication.data.Hero
 import com.example.apiapplication.databinding.FragmentPlayerstatsBinding
 import com.example.apiapplication.presentation.ui.adapters.MyAdapter
 import com.example.apiapplication.presentation.viewmodel.MainViewModel
@@ -40,8 +38,8 @@ class PlayerStatsFragment : Fragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.myRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView = requireView().findViewById(R.id.myRecyclerView)
+        binding.matchesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView = requireView().findViewById(R.id.matches_recycler_view)
         myAdapter = MyAdapter()
         recyclerView.adapter = myAdapter
 

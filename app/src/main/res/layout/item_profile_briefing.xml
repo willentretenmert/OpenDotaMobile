@@ -7,7 +7,7 @@
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     android:id="@+id/item_profile_briefing"
-    android:layout_margin="6dp">
+    android:layout_marginEnd="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:id="@+id/briefing_winrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="70%"
+            android:text="wr%"
             android:layout_weight="0.1"
             android:textColor="@color/labelColor"
             android:fontFamily="@font/inter_extrabold"/>
@@ -42,7 +42,7 @@
             android:id="@+id/briefing_total_matches"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1234"
+            android:text="mp"
             android:layout_weight="0.4"
             android:textColor="@color/white"
             android:fontFamily="@font/inter_extrabold"/>

@@ -6,28 +6,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.ui.fragments.PlayerStatsFragment"
+    android:background="@color/background"
     android:layout_marginTop="?attr/actionBarSize"
     android:layout_marginBottom="?attr/actionBarSize">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="top"
+        android:gravity="top|center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <include
+            android:id="@+id/item_playerstats"
+            layout="@layout/item_playerstats"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_playerstats"
-            android:id="@+id/myRecyclerView">
+            android:layout_height="164dp"
+            tools:listitem="@layout/item_match"
+            android:id="@+id/matches_recycler_view">
 
         </androidx.recyclerview.widget.RecyclerView>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="@string/button_show_all"
+            android:textColor="@color/buttonTextColor"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/inter_extrabold"
+            android:layout_marginTop="16dp"/>
+
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,81 +1,76 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:backgroundTint="@color/itemBackground2"
+    android:id="@+id/item_playerstats"
+
+    android:layout_height="160dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:contentPaddingLeft="8dp"
+    app:contentPaddingRight="8dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="72dp"
-        android:layout_height="30dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="3dp"
-        android:backgroundTint="@color/buttonLike" />
+        android:backgroundTint="@color/gray"
+        android:id="@+id/playerstats_nickname"
+        android:layout_gravity="center|top"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_width="160dp"
+        android:textAlignment="center"
+        app:cardCornerRadius="10dp">
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/item_playerstats"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:backgroundTint="@color/itemBackground2"
-        app:cardCornerRadius="14dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        app:contentPaddingLeft="8dp"
-        app:contentPaddingRight="8dp">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="160dp"
+        <TextView
+            android:fontFamily="@font/inter_extrabold"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="5dp"
-            android:backgroundTint="@color/gray"
-            android:textAlignment="center"
-            app:cardCornerRadius="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/inter_extrabold"
-                android:text="@string/nickname"
-                android:textColor="@color/white" />
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <include
-                android:id="@+id/profile_briefing"
-                layout="@layout/item_profile_briefing" />
-
-            <include
-                android:id="@+id/hero1"
-                layout="@layout/item_hero_stats" />
-
-            <include
-                android:id="@+id/hero2"
-                layout="@layout/item_hero_stats" />
-
-            <include
-                android:id="@+id/hero3"
-                layout="@layout/item_hero_stats" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:backgroundTint="@color/itemBackground1"
-                app:cardCornerRadius="100dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@mipmap/ic_rank_legend5" />
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-
+            android:layout_width="wrap_content"
+            android:text="@string/nickname"
+            android:textColor="@color/white" />
     </androidx.cardview.widget.CardView>
 
+    <LinearLayout
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/profile_briefing"
+            layout="@layout/item_profile_briefing" />
+
+        <include
+            android:id="@+id/hero1"
+            layout="@layout/item_hero_stats" />
+
+        <include
+            android:id="@+id/hero2"
+            layout="@layout/item_hero_stats" />
+
+        <include
+            android:id="@+id/hero3"
+            layout="@layout/item_hero_stats" />
+
+        <androidx.cardview.widget.CardView
+            android:backgroundTint="@color/itemBackground1"
+            android:layout_height="72dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="2dp"
+            android:layout_width="72dp"
+            app:cardCornerRadius="100dp">
+
+            <ImageView
+                android:id="@+id/playerstats_rank"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                app:srcCompat="@mipmap/ic_rank_legend5" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/item_button_like" />
+
 </androidx.cardview.widget.CardView>
+

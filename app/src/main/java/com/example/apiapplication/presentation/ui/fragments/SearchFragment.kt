@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentMainBinding
 import com.example.apiapplication.databinding.FragmentSearchBinding
@@ -36,6 +38,16 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.searchPlayerBtn.setOnClickListener {
+
+            if (binding.searchBar.text.isNotBlank()) {
+                val action = SearchFragmentDirections
+                    .actionSearchFragmentToPlayerStatsFragment( binding.searchBar.text.toString() )
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 }

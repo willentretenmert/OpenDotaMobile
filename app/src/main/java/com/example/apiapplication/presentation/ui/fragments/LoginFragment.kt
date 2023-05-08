@@ -34,7 +34,7 @@ class LoginFragment : Fragment() {
                 val login = binding.editTextLogin.text.toString()
                 val password = binding.editTextPassword.text.toString()
                 if (login == "zxc" && password == "123") {
-                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
                     val bottomNavigation =
                         activity?.findViewById<BottomNavigationView>(R.id.navigation)
                     bottomNavigation?.visibility = View.VISIBLE

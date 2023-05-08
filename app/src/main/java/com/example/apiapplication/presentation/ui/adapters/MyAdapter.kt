@@ -31,7 +31,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
         var name: TextView? = null
         var localized_name: TextView? = null
         fun ViewModel(view: View){
-            name = view.findViewById(R.id.name)
+            name = view.findViewById(R.id.hero)
             localized_name = view.findViewById(R.id.mode)
         }
     }

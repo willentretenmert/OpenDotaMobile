@@ -1,7 +1,6 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:backgroundTint="@color/itemBackground2"
-    android:id="@+id/item_playerstats"
-android:layout_marginTop="10dp"
+    android:layout_marginTop="10dp"
     android:layout_height="180dp"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +12,6 @@ android:layout_marginTop="10dp"
 
     <androidx.cardview.widget.CardView
         android:backgroundTint="@color/gray"
-        android:id="@+id/playerstats_nickname"
         android:layout_gravity="center|top"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -22,6 +20,7 @@ android:layout_marginTop="10dp"
         app:cardCornerRadius="10dp">
 
         <TextView
+            android:id="@+id/playerstats_nickname"
             android:fontFamily="@font/inter_extrabold"
             android:layout_gravity="center"
             android:layout_height="wrap_content"

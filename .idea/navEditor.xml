@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_loginFragment_to_mainFragment">
+                            <entry key="action_loginFragment_to_searchFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -46,13 +46,25 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="mainFragment">
+                  <entry key="playerStatsFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="368" />
+                            <option name="x" value="245" />
+                            <option name="y" value="352" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="searchFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="244" />
+                            <option name="y" value="10" />
                           </Point>
                         </option>
                       </LayoutPositions>

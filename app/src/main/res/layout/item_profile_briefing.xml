@@ -6,7 +6,6 @@
     android:backgroundTint="@color/itemBackground1"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    android:id="@+id/item_profile_briefing"
     android:layout_marginEnd="10dp">
 
     <LinearLayout

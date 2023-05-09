@@ -43,6 +43,7 @@
             app:itemBackground="@color/bottomBarColor"
             app:itemTextColor="@color/white"
             app:itemIconTint="@color/white"
+            app:labelVisibilityMode="labeled"
             app:itemActiveIndicatorStyle="@style/OpenDota.Custom.bottomNavIndicator"
             app:itemPaddingTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"

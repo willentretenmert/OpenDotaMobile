@@ -1,17 +1,19 @@
 package com.example.apiapplication.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel : ViewModel() {
-    private val auth = FirebaseAuth.getInstance()
 
+    private val auth = MainActivity.User.auth
     fun getAuth(login: String, password: String, callback: (Boolean) -> Unit) {
         auth.signInWithEmailAndPassword(login, password).addOnCompleteListener { task ->
-                val loginResult = if (task.isSuccessful) task.isSuccessful
-                else false
-                callback(loginResult)
-            }
+            callback(task.isSuccessful)
+        }
+    }
+
+    fun checkAuth() : Boolean{
+        return auth.currentUser != null
     }
 }

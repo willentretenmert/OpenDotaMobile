@@ -37,20 +37,27 @@ class LoginFragment : Fragment() {
     }
 
     private fun setEventListener() {
-        binding.loginButton.setOnClickListener {
-            if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
-                val login = binding.editTextLogin.text.toString()
-                val password = binding.editTextPassword.text.toString()
-                viewModel.getAuth(login, password) { loginResult ->
-                    if (loginResult)
-                    {
-                        findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
+        if (!viewModel.checkAuth()){
+            binding.loginButton.setOnClickListener {
+                if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
+                    val login = binding.editTextLogin.text.toString()
+                    val password = binding.editTextPassword.text.toString()
+                    viewModel.getAuth(login, password) { loginResult ->
+                        if (loginResult)
+                        {
+                            findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
                             val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
                             bottomNavigation?.visibility = View.VISIBLE
+                        }
+                        else Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
                     }
-                    else Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        else {
+            findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
+            val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+            bottomNavigation?.visibility = View.VISIBLE
         }
         binding.signupButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signupFragment)

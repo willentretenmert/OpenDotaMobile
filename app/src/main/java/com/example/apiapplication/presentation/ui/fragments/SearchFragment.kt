@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
 
         binding.searchPlayerBtn.setOnClickListener {
 
-            if (binding.searchBar.text.isNotBlank()) {
+            if (binding.searchBar.text.trim().isNotBlank()) {
                 val action = SearchFragmentDirections
                     .actionSearchFragmentToPlayerStatsFragment( binding.searchBar.text.toString() )
                 findNavController().navigate(action)

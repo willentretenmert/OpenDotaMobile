@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.LoginFragment"
-        android:label="LoginFragment">
+        android:label="fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
@@ -21,6 +21,7 @@
             android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.SignUpFragment"
@@ -30,6 +31,7 @@
             android:id="@+id/action_signupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.SearchFragment"
@@ -42,6 +44,7 @@
             android:name="playerId"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/playerStatsFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.PlayerStatsFragment"
@@ -51,6 +54,7 @@
             android:name="playerId"
             app:argType="string" />
     </fragment>
+
 
 
 </navigation>

@@ -10,9 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.apiapplication.databinding.FragmentPlayerstatsBinding
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class PlayerStatsFragment : Fragment()  {
+class PlayerStatsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayerstatsBinding
     private lateinit var viewModel: PlayerStatsViewModel
@@ -36,41 +38,63 @@ class PlayerStatsFragment : Fragment()  {
 
         val args: PlayerStatsFragmentArgs by navArgs()
         val id = args.playerId
-        viewModel.fetchHeroes()
-        viewModel.fetchPlayerStats(id)
 
         viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.fetchHeroes()
+            viewModel.fetchPlayerStats(id)
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             collectPlayerProfile { playerStatsNickname ->
-                binding.playerstats.playerstatsNickname.text = playerStatsNickname }
+                binding.playerstats.playerstatsNickname.text = playerStatsNickname
+            }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             collectPlayerWinrate { playerWinrate ->
-            binding.playerstats.profileBriefing.briefingWinrate.text = playerWinrate }
+                binding.playerstats.profileBriefing.briefingWinrate.text = playerWinrate
+            }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             collectPlayerTotalMP { playersTotalMP ->
-            binding.playerstats.profileBriefing.briefingTotalMatches.text = playersTotalMP }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            collectPlayerHeroStats { heroName, heroGames, heroWinrate ->
-            binding.playerstats.hero1.heroGames.text = heroGames
-            binding.playerstats.hero1.heroWinrate.text = heroWinrate }
-        }
-
-
-
-    }
-
-    private suspend fun collectPlayerHeroStats(onHeroDataReady: (String, String, String) -> Unit) {
-        viewModel.heroes.collect { heroes ->
-            viewModel.playersHeroStats.collect { playersHeroStats ->
-                val heroName = viewModel.getHeroNameByIndex(heroes, playersHeroStats)
-                val heroGames = viewModel.getHeroGames(playersHeroStats)
-                val heroWinrate = viewModel.getHeroWinrate(playersHeroStats)
-                onHeroDataReady(heroName, heroGames, heroWinrate)
+                binding.playerstats.profileBriefing.briefingTotalMatches.text =
+                    playersTotalMP
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            collectPlayerHeroStats { heroIndex, heroName, heroGames, heroWinrate ->
+                when (heroIndex) {
+                    0 -> {
+                        binding.playerstats.hero1.heroGames.text = heroGames
+                        binding.playerstats.hero1.heroWinrate.text = heroWinrate
+                    }
 
+                    1 -> {
+                        binding.playerstats.hero2.heroGames.text = heroGames
+                        binding.playerstats.hero2.heroWinrate.text = heroWinrate
+                    }
+
+                    2 -> {
+                        binding.playerstats.hero3.heroGames.text = heroGames
+                        binding.playerstats.hero3.heroWinrate.text = heroWinrate
+                    }
+                }
+            }
+        }
+    }
+
+
+    private suspend fun collectPlayerHeroStats(onHeroDataReady: (Int, String, String, String) -> Unit) {
+        viewModel.heroes.collect { heroes ->
+            viewModel.playersHeroStats.collect { playersHeroStats ->
+                if (playersHeroStats.size >= 3) {
+                    for (i in 0..2) {
+                        val heroName = viewModel.getHeroNameByIndex(heroes, playersHeroStats, i)
+                        val heroGames = viewModel.getHeroGames(playersHeroStats, i)
+                        val heroWinrate = viewModel.getHeroWinrate(playersHeroStats, i)
+                        onHeroDataReady(i, heroName, heroGames, heroWinrate)
+                    }
+                }
+            }
+        }
     }
 
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String) -> Unit) {
@@ -86,6 +110,7 @@ class PlayerStatsFragment : Fragment()  {
             onPlayerDataReady(playersWinrate)
         }
     }
+
     private suspend fun collectPlayerTotalMP(onPlayerDataReady: (String) -> Unit) {
         viewModel.playersWinrate.collect { PlayersTotalMP ->
             val playersTotalMP = viewModel.getPlayersTotal(PlayersTotalMP)

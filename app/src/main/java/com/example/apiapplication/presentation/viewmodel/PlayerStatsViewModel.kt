@@ -66,6 +66,16 @@ class PlayerStatsViewModel : ViewModel() {
         return data.firstOrNull { v -> v.id == data2.firstOrNull()?.hero_id?.toInt() } ?.name ?: ""
     }
 
+    fun getHeroGames(data2: List<PlayersHeroStats>): String {
+        return data2.firstOrNull()?.games.toString()
+    }
+
+    fun getHeroWinrate(data2: List<PlayersHeroStats>): String {
+        val wins: Int = data2.firstOrNull()?.win ?: 0
+        val total: Int = data2.firstOrNull()?.games ?: 1
+        return if (total != 0) (wins.toDouble() / total * 100).toInt().toString() + "%" else "0%"
+    }
+
     // returns player's steam current nickname
     fun getPlayersPersonaName(data3: PlayersProfile?): String {
         return data3?.profile?.personaname ?: ""

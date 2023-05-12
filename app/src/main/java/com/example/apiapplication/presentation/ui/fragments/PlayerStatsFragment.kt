@@ -8,10 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.example.apiapplication.data.PlayersWinrate
 import com.example.apiapplication.databinding.FragmentPlayerstatsBinding
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class PlayerStatsFragment : Fragment()  {
@@ -53,6 +51,11 @@ class PlayerStatsFragment : Fragment()  {
             collectPlayerTotalMP { playersTotalMP ->
             binding.playerstats.profileBriefing.briefingTotalMatches.text = playersTotalMP }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            collectPlayerHeroStats { heroName, heroGames, heroWinrate ->
+            binding.playerstats.hero1.heroGames.text = heroGames
+            binding.playerstats.hero1.heroWinrate.text = heroWinrate }
+        }
 
 
 
@@ -62,8 +65,8 @@ class PlayerStatsFragment : Fragment()  {
         viewModel.heroes.collect { heroes ->
             viewModel.playersHeroStats.collect { playersHeroStats ->
                 val heroName = viewModel.getHeroNameByIndex(heroes, playersHeroStats)
-                val heroGames = "${playersHeroStats.firstOrNull()?.games}"
-                val heroWinrate = "${}"
+                val heroGames = viewModel.getHeroGames(playersHeroStats)
+                val heroWinrate = viewModel.getHeroWinrate(playersHeroStats)
                 onHeroDataReady(heroName, heroGames, heroWinrate)
             }
         }

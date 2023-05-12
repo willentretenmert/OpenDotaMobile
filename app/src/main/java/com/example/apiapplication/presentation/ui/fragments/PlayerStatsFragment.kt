@@ -38,6 +38,7 @@ class PlayerStatsFragment : Fragment()  {
 
         val args: PlayerStatsFragmentArgs by navArgs()
         val id = args.playerId
+        viewModel.fetchHeroes()
         viewModel.fetchPlayerStats(id)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -52,26 +53,21 @@ class PlayerStatsFragment : Fragment()  {
             collectPlayerTotalMP { playersTotalMP ->
             binding.playerstats.profileBriefing.briefingTotalMatches.text = playersTotalMP }
         }
+
+
+
     }
 
-    private suspend fun collectPlayerHeroStats(onHeroDataReady: (Int, String, String) -> Unit) {
+    private suspend fun collectPlayerHeroStats(onHeroDataReady: (String, String, String) -> Unit) {
         viewModel.heroes.collect { heroes ->
             viewModel.playersHeroStats.collect { playersHeroStats ->
-                for (i in 0..2) {
-                    val heroName = viewModel.getHeroNameByIndex(heroes, playersHeroStats, i)
-                    val appendix = """
-                        |
-                    |MP: ${playersHeroStats[i].games}
-                    |WR: ${
-                        String.format(
-                            "%.0f",
-                            playersHeroStats[i].win.toDouble() / playersHeroStats[i].games.toDouble() * 100
-                        )
-                    }%""".trimMargin()
-                    onHeroDataReady(i, heroName, appendix)
-                }
+                val heroName = viewModel.getHeroNameByIndex(heroes, playersHeroStats)
+                val heroGames = "${playersHeroStats.firstOrNull()?.games}"
+                val heroWinrate = "${}"
+                onHeroDataReady(heroName, heroGames, heroWinrate)
             }
         }
+
     }
 
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String) -> Unit) {

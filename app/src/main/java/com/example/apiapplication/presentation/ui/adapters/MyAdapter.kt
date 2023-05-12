@@ -8,15 +8,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
 import com.example.apiapplication.data.Hero
 
-class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-    private var data: List<Hero>? = null
+class MatchesAdapter : RecyclerView.Adapter<MatchesAdapter.MatchesViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_playerstats, parent,false)
-        return ViewHolder(view)
+    class MatchesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var name: TextView? = null
+        private var localizedName: TextView? = null
+        fun viewModel(view: View){
+            name = view.findViewById(R.id.hero)
+            localizedName = view.findViewById(R.id.mode)
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    private var data: List<Hero>? = null
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_playerstats, parent,false)
+        return MatchesViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: MatchesViewHolder, position: Int) {
         holder.name?.text = data?.get(position)!!.name
 
         //name = data[position].name
@@ -26,15 +36,5 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
     }
 
     override fun getItemCount() = data!!.size
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var name: TextView? = null
-        var localized_name: TextView? = null
-        fun ViewModel(view: View){
-            name = view.findViewById(R.id.hero)
-            localized_name = view.findViewById(R.id.mode)
-        }
-    }
-
 
 }

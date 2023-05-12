@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.net.URL
 
 class PlayerStatsViewModel : ViewModel() {
@@ -32,7 +33,7 @@ class PlayerStatsViewModel : ViewModel() {
     fun fetchHeroes() {
         viewModelScope.launch(Dispatchers.IO) {
             val data = gson.fromJson(
-                URL("https://api.opendota.com/api/heroes").readText(),
+                File("./src/main/java/domain/hero_list.json").readText(Charsets.UTF_8),
                 Array<Hero>::class.java
             )
             _heroes.value = data.toList()
@@ -60,20 +61,24 @@ class PlayerStatsViewModel : ViewModel() {
         }
     }
 
-    // returns hero localized name requiring a hero list and player's personal statistics list
-    fun getHeroNameByIndex(data: List<Hero>, data2: List<PlayersHeroStats>, i: Int): String {
-        return data.firstOrNull { v -> v.id == data2[i].hero_id.toInt() }?.localized_name ?: ""
+    // returns hero original name requiring a hero list and player's personal statistics list
+    fun getHeroNameByIndex(data: List<Hero>, data2: List<PlayersHeroStats>): String {
+        return data.firstOrNull { v -> v.id == data2.firstOrNull()?.hero_id?.toInt() } ?.name ?: ""
     }
 
+    // returns player's steam current nickname
     fun getPlayersPersonaName(data3: PlayersProfile?): String {
         return data3?.profile?.personaname ?: ""
     }
+
+    // returns player's winrate percentage
     fun getPlayersWinrate(data4: PlayersWinrate?): String {
         val wins: Int = data4?.win ?: 0
         val total: Int = wins + (data4?.lose ?: 0)
         return if (total != 0) (wins.toDouble() / total * 100).toInt().toString() + "%" else "0%"
     }
 
+    // returns player's total matches count
     fun getPlayersTotal(data4: PlayersWinrate?): String {
         return ((data4?.win ?: 0) + (data4?.lose ?: 0)).toString()
     }

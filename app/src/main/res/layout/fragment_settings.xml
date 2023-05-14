@@ -22,35 +22,44 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:text="@string/username"
-
+        android:text="@string/nickname"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_avatar"
         app:layout_constraintVertical_bias="0.02" />
 
-    <Button
-        android:id="@+id/profile_settings_btn"
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editProfile_button"
+        android:layout_width="177sp"
         android:layout_height="wrap_content"
-        android:text="@string/edit_profile"
-        android:layout_marginTop="36dp"
-
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/inter_extrabold"
+        android:gravity="center"
+        android:text="@string/btn_editProfile"
+        android:textColor="@color/buttonTextColor"
+        app:backgroundTint="@color/buttonBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username" />
 
-    <Button
-        android:id="@+id/logout_btn"
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logout_button"
+        android:layout_width="177sp"
         android:layout_height="wrap_content"
-        android:text="@string/log_out"
-        android:layout_marginTop="10dp"
-
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/inter_extrabold"
+        android:gravity="center"
+        android:text="@string/btn_logout"
+        android:textColor="@color/buttonTextColor"
+        app:backgroundTint="@color/buttonBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_settings_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/editProfile_button"
+        app:layout_constraintVertical_bias="0.033" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

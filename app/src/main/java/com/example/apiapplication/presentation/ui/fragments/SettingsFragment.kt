@@ -14,7 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class SettingsFragment : Fragment(){
 
     private lateinit var binding : FragmentSettingsBinding
-    //private val viewModel : SettingsViewModel by lazy { ViewModelProvider(this)[SettingsViewModel::class.java] }
+    private val viewModel : SettingsViewModel by lazy { ViewModelProvider(this)[SettingsViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater,

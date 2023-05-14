@@ -11,7 +11,7 @@ data class PlayersHeroStats(
     @field:SerializedName("games")
     val games: Int,
     @field:SerializedName("hero_id")
-    val hero_id: String,
+    val hero_id: Int,
     @field:SerializedName("last_played")
     val last_played: Int,
     @field:SerializedName("win")

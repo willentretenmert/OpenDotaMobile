@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentPlayerstatsBinding
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,6 +20,7 @@ class PlayerStatsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayerstatsBinding
     private lateinit var viewModel: PlayerStatsViewModel
+    private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,7 @@ class PlayerStatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlayerstatsBinding.inflate(layoutInflater, container, false)
+        bottomNavigation?.visibility = View.VISIBLE
         return binding.root
     }
 

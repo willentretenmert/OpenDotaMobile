@@ -13,12 +13,14 @@ import com.example.apiapplication.databinding.FragmentLoginBinding
 import com.example.apiapplication.databinding.FragmentSignUpBinding
 import com.example.apiapplication.presentation.viewmodel.LoginViewModel
 import com.example.apiapplication.presentation.viewmodel.SignUpViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpFragment : Fragment() {
 
     private lateinit var binding : FragmentSignUpBinding
     private val viewModel : SignUpViewModel by lazy { ViewModelProvider(this)[SignUpViewModel::class.java] }
+    private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +28,7 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSignUpBinding.inflate(layoutInflater, container, false)
+        bottomNavigation?.visibility = View.INVISIBLE
         setEventListener()
         return binding.root
     }

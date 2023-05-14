@@ -14,12 +14,14 @@ import com.example.apiapplication.databinding.FragmentSearchBinding
 import com.example.apiapplication.databinding.FragmentSignUpBinding
 import com.example.apiapplication.presentation.viewmodel.MainViewModel
 import com.example.apiapplication.presentation.viewmodel.SearchViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
+    private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,8 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        //bottomNavigation = requireActivity().findViewById(R.id.navigation)
+        //bottomNavigation.visibility = View.VISIBLE
         return binding.root
     }
 

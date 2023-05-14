@@ -6,22 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentLoginBinding
+import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.viewmodel.LoginViewModel
-import com.example.apiapplication.presentation.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
-    private lateinit var binding : FragmentLoginBinding
-    private val viewModel : LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
-    val mAuth = FirebaseAuth.getInstance()
+    private lateinit var binding: FragmentLoginBinding
+    private val viewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
+    //private val bottomNavigation: BottomNavigationView by lazy { requireActivity().findViewById<BottomNavigationView>(R.id.navigation) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,38 +32,44 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
-        val bottomNavigation =
-            activity?.findViewById<BottomNavigationView>(R.id.navigation)
-        bottomNavigation?.visibility = View.INVISIBLE
-        setEventListener()
+        val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+        //bottomNavigation?.visibility = View.INVISIBLE
+        viewModel.checkAuth()
+        viewLifecycleOwner.lifecycleScope.launch { setObserver() }
         return binding.root
     }
 
-    private fun setEventListener() {
-        if (!viewModel.checkAuth()){
-            binding.loginButton.setOnClickListener {
-                if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
-                    val login = binding.editTextLogin.text.toString()
-                    val password = binding.editTextPassword.text.toString()
-                    viewModel.getAuth(login, password) { loginResult ->
-                        if (loginResult)
-                        {
-                            findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
-                            val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-                            bottomNavigation?.visibility = View.VISIBLE
+    //@Deprecated("Deprecated in Java")
+    //override fun onActivityCreated(savedInstanceState: Bundle?) {
+    //    super.onActivityCreated(savedInstanceState)
+    //    val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+    //    bottomNavigation?.visibility = View.INVISIBLE
+    //}
+
+    //override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    //    super.onViewCreated(view, savedInstanceState)
+    //    val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.navigation)
+    //    bottomNavigation.visibility = View.INVISIBLE
+    //}
+
+    private suspend fun setObserver() {
+        viewModel.isLoginSuccessful.collect() {
+            if (it == true) {
+                findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
+                val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+                bottomNavigation?.visibility = View.VISIBLE
+            } else {
+                binding.loginButton.setOnClickListener {
+                    if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
+                        val login = binding.editTextLogin.text.toString()
+                        val password = binding.editTextPassword.text.toString()
+                        viewModel.getAuth(login, password) { loginResult ->
+                            if (loginResult) findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
+                            else Toast.makeText(context,"Authentication failed.",Toast.LENGTH_SHORT).show()
                         }
-                        else Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-        }
-        else {
-            findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
-            val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-            bottomNavigation?.visibility = View.VISIBLE
-        }
-        binding.signupButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
         }
     }
 }

@@ -23,7 +23,7 @@
             app:titleTextAppearance="@style/OpenDota.Custom.ToolBar"
             app:titleTextColor="@color/white" />
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:layout_marginBottom="?android:actionBarSize"
             android:layout_marginTop="?android:actionBarSize"
             android:id="@+id/nav_host_fragment_activity_main"

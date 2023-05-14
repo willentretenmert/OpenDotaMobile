@@ -4,10 +4,10 @@
     <item android:id="@+id/action_favs"
         android:title="@string/menu_favs"
         android:icon="@drawable/ic_star" />
-    <item android:id="@+id/action_search"
+    <item android:id="@+id/searchFragment"
         android:title="@string/menu_search"
         android:icon="@drawable/ic_search" />
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/settingsFragment"
         android:title="@string/menu_settings"
         android:icon="@drawable/ic_settings" />
 

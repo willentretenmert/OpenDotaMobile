@@ -47,6 +47,5 @@ class SearchFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 }

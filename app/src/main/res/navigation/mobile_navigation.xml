@@ -13,7 +13,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.LoginFragment"
-        android:label="fragment_login">
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
@@ -40,9 +41,6 @@
         <action
             android:id="@+id/action_searchFragment_to_playerStatsFragment"
             app:destination="@id/playerStatsFragment" />
-        <argument
-            android:name="playerId"
-            app:argType="string" />
     </fragment>
 
     <fragment
@@ -55,6 +53,11 @@
             app:argType="string" />
     </fragment>
 
-
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.apiapplication.presentation.ui.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings">
+    </fragment>
 
 </navigation>

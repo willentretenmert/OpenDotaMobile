@@ -39,22 +39,6 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-<<<<<<< HEAD
-=======
-    //@Deprecated("Deprecated in Java")
-    //override fun onActivityCreated(savedInstanceState: Bundle?) {
-    //  super.onActivityCreated(savedInstanceState)
-    //  val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-    //  bottomNavigation?.visibility = View.INVISIBLE
-    //}
-//
-    //override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    //    super.onViewCreated(view, savedInstanceState)
-    //    val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.navigation)
-    //    bottomNavigation.visibility = View.INVISIBLE
-    //}
-
->>>>>>> 6ef281fdd4a9fa281127ca68f98e22f8fd1382d7
     private suspend fun setObserver() {
         viewModel.isLoginSuccessful.collect() {
             if (it == true) {
@@ -66,6 +50,8 @@ class LoginFragment : Fragment() {
                     if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
                         val login = binding.editTextLogin.text.toString()
                         val password = binding.editTextPassword.text.toString()
+                        binding.editTextLogin.text.clear()
+                        binding.editTextPassword.text.clear()
                         viewModel.getAuth(login, password) { loginResult ->
                             if (loginResult) findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
                             else Toast.makeText(context,"Authentication failed.",Toast.LENGTH_SHORT).show()

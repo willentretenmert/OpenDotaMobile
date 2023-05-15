@@ -16,10 +16,6 @@ class SettingsFragment : Fragment(){
 
     private lateinit var binding : FragmentSettingsBinding
     private val viewModel : SettingsViewModel by lazy { ViewModelProvider(this)[SettingsViewModel::class.java] }
-<<<<<<< HEAD
-=======
-    //private lateinit var bottomNavigation: BottomNavigationView
->>>>>>> 6ef281fdd4a9fa281127ca68f98e22f8fd1382d7
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +33,8 @@ class SettingsFragment : Fragment(){
         binding.logoutButton.setOnClickListener {
             viewModel.logOut()
             findNavController().apply {
-                popBackStack(R.id.settingsFragment, false)
                 navigate(R.id.action_settingsFragment_to_loginFragment)
-                //bottomNavigation.visibility = View.INVISIBLE
+                popBackStack(R.id.settingsFragment, true)
             }
         }
     }

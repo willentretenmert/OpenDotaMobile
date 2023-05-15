@@ -16,6 +16,10 @@ class SettingsFragment : Fragment(){
 
     private lateinit var binding : FragmentSettingsBinding
     private val viewModel : SettingsViewModel by lazy { ViewModelProvider(this)[SettingsViewModel::class.java] }
+<<<<<<< HEAD
+=======
+    //private lateinit var bottomNavigation: BottomNavigationView
+>>>>>>> 6ef281fdd4a9fa281127ca68f98e22f8fd1382d7
 
     override fun onCreateView(
         inflater: LayoutInflater,

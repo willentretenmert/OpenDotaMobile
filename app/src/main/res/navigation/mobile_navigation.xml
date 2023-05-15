@@ -61,4 +61,11 @@
             app:destination="@id/loginFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/favouritesFragment"
+        android:name="com.example.apiapplication.presentation.ui.fragments.FavouritesFragment"
+        android:label="FavouritesFragment"
+        tools:layout="@layout/fragment_favourites">
+    </fragment>
+
 </navigation>

@@ -1,5 +1,6 @@
 package com.example.apiapplication.presentation.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apiapplication.data.Hero
@@ -7,6 +8,7 @@ import com.example.apiapplication.data.OpenDotaAPI
 import com.example.apiapplication.data.PlayersHeroStats
 import com.example.apiapplication.data.PlayersProfile
 import com.example.apiapplication.data.PlayersWinrate
+import com.example.apiapplication.data.RecentMatches
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,7 +22,6 @@ import java.net.URL
 
 class PlayerStatsViewModel : ViewModel() {
 
-    private val gson = Gson()
 
     private val _heroes = MutableStateFlow<List<Hero>>(emptyList())
     val heroes: StateFlow<List<Hero>> = _heroes
@@ -34,19 +35,35 @@ class PlayerStatsViewModel : ViewModel() {
     private val _playersWinrate = MutableStateFlow<PlayersWinrate?>(null)
     val playersWinrate: StateFlow<PlayersWinrate?> = _playersWinrate
 
+    private val _recentMatches = MutableStateFlow<List<RecentMatches>>(emptyList())
+    val recentMatches: StateFlow<List<RecentMatches>> = _recentMatches
+
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.opendota.com/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val api = retrofit.create(OpenDotaAPI::class.java)
+    private val api = retrofit.create(OpenDotaAPI::class.java)
+
+    // gets a json string of dota heroes
     fun fetchHeroes() {
         viewModelScope.launch(Dispatchers.IO) {
-            val data = gson.fromJson(
-                URL("https://api.opendota.com/api/heroes").readText(),
-                Array<Hero>::class.java
-            )
-            _heroes.value = data.toList()
+            val heroesDeferred = async { api.getHeroes() }
+
+            val heroes = heroesDeferred.await()
+
+            _heroes.value = heroes.toList()
+        }
+    }
+
+    // gets a json string of player's matches recent
+    fun fetchRecentMatches(id: CharSequence) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val recentMatchesDeferred = async { api.getRecentMatches(id) }
+
+            val recentMatches = recentMatchesDeferred.await()
+
+            _recentMatches.value = recentMatches.toList()
         }
     }
 
@@ -68,34 +85,45 @@ class PlayerStatsViewModel : ViewModel() {
     }
 
     // returns hero original name requiring a hero list and player's personal statistics list
-    fun getHeroNameByIndex(data: List<Hero>, data2: List<PlayersHeroStats>, i: Int): String {
-        return data.firstOrNull { v -> v.id == data2[i].hero_id.toInt() }?.name ?: ""
+    fun getHeroNameByPlayerStatsIndex(data: List<Hero>, data2: List<PlayersHeroStats>, i: Int): String {
+        val name = data.firstOrNull { v -> v.id == data2[i].hero_id }?.name ?: ""
+        return "ic_${name}"
     }
 
-    fun getHeroGames(data2: List<PlayersHeroStats>, i: Int): String {
-        return data2[i].games.toString()
+    fun getHeroGames(data: List<PlayersHeroStats>, i: Int): String {
+        return data[i].games.toString()
     }
 
-    fun getHeroWinrate(data2: List<PlayersHeroStats>, i: Int): String {
-        val wins: Int = data2[i].win ?: 0
-        val total: Int = data2[i].games ?: 1
+    fun getHeroWinrate(data: List<PlayersHeroStats>, i: Int): String {
+        val wins: Int = data[i].win
+        val total: Int = data[i].games
         return if (total != 0) (wins.toDouble() / total * 100).toInt().toString() + "%" else "0%"
     }
 
     // returns player's steam current nickname
-    fun getPlayersPersonaName(data3: PlayersProfile?): String {
-        return data3?.profile?.personaname ?: ""
+    fun getPlayersPersonaName(data: PlayersProfile?): String {
+        return data?.profile?.personaname ?: ""
+    }
+
+    // returns player's steam profile picture
+    fun getPlayersAvatar(data: PlayersProfile?): String {
+        return data?.profile?.avatarmedium ?: ""
     }
 
     // returns player's winrate percentage
-    fun getPlayersWinrate(data4: PlayersWinrate?): String {
-        val wins: Int = data4?.win ?: 0
-        val total: Int = wins + (data4?.lose ?: 0)
-        return if (total != 0) (wins.toDouble() / total * 100).toInt().toString() + "%" else "0%"
+    fun getPlayersWinrate(data: PlayersWinrate?): Int {
+        val wins: Int = data?.win ?: 0
+        val total: Int = wins + (data?.lose ?: 0)
+        return if (total != 0) (wins.toDouble() / total * 100).toInt() else 0
     }
 
     // returns player's total matches count
-    fun getPlayersTotal(data4: PlayersWinrate?): String {
-        return ((data4?.win ?: 0) + (data4?.lose ?: 0)).toString()
+    fun getPlayersTotal(data: PlayersWinrate?): String {
+        return ((data?.win ?: 0) + (data?.lose ?: 0)).toString()
     }
+
+    fun getPlayersRank(data: PlayersProfile?): String {
+        return "ic_rank${data?.rank_tier}"
+    }
+
 }

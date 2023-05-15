@@ -34,10 +34,27 @@ class LoginFragment : Fragment() {
         val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigation?.visibility = View.INVISIBLE
         viewModel.checkAuth()
+        binding.signupButton.setOnClickListener() {findNavController().navigate(R.id.action_loginFragment_to_signupFragment)}
         viewLifecycleOwner.lifecycleScope.launch { setObserver() }
         return binding.root
     }
 
+<<<<<<< HEAD
+=======
+    //@Deprecated("Deprecated in Java")
+    //override fun onActivityCreated(savedInstanceState: Bundle?) {
+    //  super.onActivityCreated(savedInstanceState)
+    //  val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+    //  bottomNavigation?.visibility = View.INVISIBLE
+    //}
+//
+    //override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    //    super.onViewCreated(view, savedInstanceState)
+    //    val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.navigation)
+    //    bottomNavigation.visibility = View.INVISIBLE
+    //}
+
+>>>>>>> 6ef281fdd4a9fa281127ca68f98e22f8fd1382d7
     private suspend fun setObserver() {
         viewModel.isLoginSuccessful.collect() {
             if (it == true) {

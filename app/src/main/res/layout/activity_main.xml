@@ -39,7 +39,7 @@
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
-            app:itemBackground="@color/bottomBarColor"
+            app:itemBackground="@color/background"
             app:itemTextColor="@color/white"
             app:itemIconTint="@color/white"
             app:labelVisibilityMode="labeled"

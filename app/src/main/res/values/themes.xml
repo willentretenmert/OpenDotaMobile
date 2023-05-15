@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/barColor</item>
         <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">@color/background</item>
     </style>
 
     <!-- Custom bottom nav -->

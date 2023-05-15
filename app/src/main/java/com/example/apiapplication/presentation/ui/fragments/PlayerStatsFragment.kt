@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.apiapplication.R
-import com.example.apiapplication.databinding.FragmentPlayerstatsBinding
+import com.example.apiapplication.databinding.FragmentPlayerStatsBinding
 import com.example.apiapplication.presentation.ui.adapters.MatchesAdapter
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class PlayerStatsFragment : Fragment() {
 
-    private lateinit var binding: FragmentPlayerstatsBinding
+    private lateinit var binding: FragmentPlayerStatsBinding
     private lateinit var viewModel: PlayerStatsViewModel
     private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
     private lateinit var matchesAdapter: MatchesAdapter
@@ -39,7 +39,7 @@ class PlayerStatsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlayerstatsBinding.inflate(layoutInflater, container, false)
+        binding = FragmentPlayerStatsBinding.inflate(layoutInflater, container, false)
         bottomNavigation?.visibility = View.VISIBLE
         return binding.root
     }
@@ -134,9 +134,11 @@ class PlayerStatsFragment : Fragment() {
         }
     }
 
-    // 1068042013
-    // 275690206
-    // 228759689
+    // 1068042013 - sasha
+    // 275690206 - dima
+    // 228759689 - hz
+    // 132697251 - shustr
+    // 121473493 - max
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String, String) -> Unit) {
         viewModel.playersProfile.collect { playersProfile ->
             val playerStatsNickname = viewModel.getPlayersPersonaName(playersProfile)

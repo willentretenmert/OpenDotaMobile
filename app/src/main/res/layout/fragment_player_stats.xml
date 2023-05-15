@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.ui.fragments.PlayerStatsFragment"
-    android:background="@color/background"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:layout_marginBottom="?attr/actionBarSize">
+    android:background="@color/background" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +27,7 @@
             android:paddingRight="20dp"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
-            android:layout_height="164dp"
+            android:layout_height="276dp"
             tools:listitem="@layout/item_match"
             android:id="@+id/matches_recycler_view">
 
@@ -38,20 +36,20 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/show_all"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:text="@string/button_show_all"
             android:textColor="@color/buttonTextColor"
             android:background="@drawable/button_background"
             android:fontFamily="@font/inter_extrabold"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
-            android:layout_height="188dp"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/item_comment"
             android:id="@+id/comments_recycler_view" />
 

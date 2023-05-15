@@ -24,6 +24,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
+    //private val bottomNavigation: BottomNavigationView by lazy { requireActivity().findViewById<BottomNavigationView>(R.id.navigation) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,12 +33,24 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-        bottomNavigation?.visibility = View.INVISIBLE
+        //bottomNavigation?.visibility = View.INVISIBLE
         viewModel.checkAuth()
-        binding.signupButton.setOnClickListener() {findNavController().navigate(R.id.action_loginFragment_to_signupFragment)}
         viewLifecycleOwner.lifecycleScope.launch { setObserver() }
         return binding.root
     }
+
+    //@Deprecated("Deprecated in Java")
+    //override fun onActivityCreated(savedInstanceState: Bundle?) {
+    //    super.onActivityCreated(savedInstanceState)
+    //    val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+    //    bottomNavigation?.visibility = View.INVISIBLE
+    //}
+
+    //override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    //    super.onViewCreated(view, savedInstanceState)
+    //    val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.navigation)
+    //    bottomNavigation.visibility = View.INVISIBLE
+    //}
 
     private suspend fun setObserver() {
         viewModel.isLoginSuccessful.collect() {
@@ -50,8 +63,6 @@ class LoginFragment : Fragment() {
                     if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
                         val login = binding.editTextLogin.text.toString()
                         val password = binding.editTextPassword.text.toString()
-                        binding.editTextLogin.text.clear()
-                        binding.editTextPassword.text.clear()
                         viewModel.getAuth(login, password) { loginResult ->
                             if (loginResult) findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
                             else Toast.makeText(context,"Authentication failed.",Toast.LENGTH_SHORT).show()

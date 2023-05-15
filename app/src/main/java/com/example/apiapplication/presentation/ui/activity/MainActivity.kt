@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.ActivityMainBinding
@@ -22,9 +21,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navigation = findViewById<BottomNavigationView>(R.id.navigation)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
-        val navController = navHostFragment.navController
+        val navigation : BottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation)
+        navigation.visibility = View.VISIBLE
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navigation.setupWithNavController(navController)
     }
 }

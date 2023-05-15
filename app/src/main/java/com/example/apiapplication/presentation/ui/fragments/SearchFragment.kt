@@ -21,6 +21,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
+    private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +33,8 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
-        val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-        bottomNavigation?.visibility = View.VISIBLE
+        //bottomNavigation = requireActivity().findViewById(R.id.navigation)
+        //bottomNavigation.visibility = View.VISIBLE
         return binding.root
     }
 

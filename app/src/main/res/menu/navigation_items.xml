@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/action_favs"
+    <item android:id="@+id/favouritesFragment"
         android:title="@string/menu_favs"
         android:icon="@drawable/ic_star" />
     <item android:id="@+id/searchFragment"

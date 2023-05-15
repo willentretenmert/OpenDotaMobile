@@ -60,10 +60,10 @@
             app:cardCornerRadius="100dp">
 
             <ImageView
+                android:layout_margin="8dp"
                 android:id="@+id/playerstats_rank"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                app:srcCompat="@mipmap/ic_rank_legend5" />
+                android:layout_width="match_parent" />
 
 
         </androidx.cardview.widget.CardView>

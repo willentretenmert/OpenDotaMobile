@@ -12,4 +12,10 @@ interface OpenDotaAPI {
 
     @GET("players/{id}/wl")
     suspend fun getPlayerWinrate(@Path("id") id: CharSequence): PlayersWinrate
+
+    @GET("players/{id}/recentMatches")
+    suspend fun getRecentMatches(@Path("id") id: CharSequence): Array<RecentMatches>
+
+    @GET("heroes")
+    suspend fun getHeroes(): Array<Hero>
 }

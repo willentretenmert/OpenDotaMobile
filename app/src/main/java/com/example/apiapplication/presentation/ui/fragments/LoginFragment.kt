@@ -35,17 +35,18 @@ class LoginFragment : Fragment() {
         val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
         //bottomNavigation?.visibility = View.INVISIBLE
         viewModel.checkAuth()
+        binding.signupButton.setOnClickListener() {findNavController().navigate(R.id.action_loginFragment_to_signupFragment)}
         viewLifecycleOwner.lifecycleScope.launch { setObserver() }
         return binding.root
     }
 
     //@Deprecated("Deprecated in Java")
     //override fun onActivityCreated(savedInstanceState: Bundle?) {
-    //    super.onActivityCreated(savedInstanceState)
-    //    val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-    //    bottomNavigation?.visibility = View.INVISIBLE
+    //  super.onActivityCreated(savedInstanceState)
+    //  val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+    //  bottomNavigation?.visibility = View.INVISIBLE
     //}
-
+//
     //override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     //    super.onViewCreated(view, savedInstanceState)
     //    val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.navigation)

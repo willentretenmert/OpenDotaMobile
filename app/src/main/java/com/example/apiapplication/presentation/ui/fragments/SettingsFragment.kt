@@ -16,7 +16,7 @@ class SettingsFragment : Fragment(){
 
     private lateinit var binding : FragmentSettingsBinding
     private val viewModel : SettingsViewModel by lazy { ViewModelProvider(this)[SettingsViewModel::class.java] }
-    private lateinit var bottomNavigation: BottomNavigationView
+    //private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,8 +24,8 @@ class SettingsFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
-        bottomNavigation = requireActivity().findViewById(R.id.navigation)
-        bottomNavigation.visibility = View.VISIBLE
+        val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
+        bottomNavigation?.visibility = View.VISIBLE
         setEventListener()
         return binding.root
     }

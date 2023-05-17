@@ -18,43 +18,28 @@
         app:layout_constraintTop_toBottomOf="parent">
 
         <include
-            android:id="@+id/playerstats"
-            layout="@layout/item_playerstats" />
+            android:id="@+id/match_briefing"
+            layout="@layout/item_match_briefing" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:isScrollContainer="false"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
             android:layout_height="276dp"
-            tools:listitem="@layout/item_match"
-            android:id="@+id/matches_recycler_view">
+            tools:listitem="@layout/item_match_player"
+            android:id="@+id/radiant_team_recycler_view">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/show_all"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:text="@string/button_show_all"
-            android:textColor="@color/buttonTextColor"
-            android:background="@drawable/button_background"
-            android:fontFamily="@font/inter_extrabold"
-            android:layout_marginTop="8dp"/>
-
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="8dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:layout_marginTop="10dp"
+            android:isScrollContainer="false"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_comment"
-            android:id="@+id/comments_recycler_view" />
+            android:layout_height="276dp"
+            tools:listitem="@layout/item_match_player"
+            android:id="@+id/dire_team_recycler_view" />
 
     </LinearLayout>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

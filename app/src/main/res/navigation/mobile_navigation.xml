@@ -39,13 +39,16 @@
         <action
             android:id="@+id/action_searchFragment_to_playerStatsFragment"
             app:destination="@id/playerStatsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_matchStatsFragment"
+            app:destination="@id/matchStatsFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/playerStatsFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.PlayerStatsFragment"
         android:label="fragment_playerstats"
-        tools:layout="@layout/fragment_playerstats">
+        tools:layout="@layout/fragment_player_stats">
         <argument
             android:name="playerId"
             app:argType="string" />
@@ -65,7 +68,15 @@
         android:id="@+id/favouritesFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.FavouritesFragment"
         android:label="FavouritesFragment"
-        tools:layout="@layout/fragment_favourites">
+        tools:layout="@layout/fragment_favourites"/>
+    <fragment
+        android:id="@+id/matchStatsFragment"
+        android:name="com.example.apiapplication.presentation.ui.fragments.MatchStatsFragment"
+        android:label="fragment_match_stats"
+        tools:layout="@layout/fragment_match_stats">
+        <argument
+            android:name="playerId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

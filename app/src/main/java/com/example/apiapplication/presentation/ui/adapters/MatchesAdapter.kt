@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
 import com.example.apiapplication.data.Hero
 import com.example.apiapplication.data.RecentMatches
-import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 
 
 class MatchesAdapter(
@@ -22,56 +21,61 @@ class MatchesAdapter(
 
     class MatchesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val heroIcon: ImageView = itemView.findViewById(R.id.match_hero_icon);
-        val outcome: TextView = itemView.findViewById(R.id.match_outcome);
-        val score: TextView = itemView.findViewById(R.id.match_score);
-        val mode: TextView = itemView.findViewById(R.id.match_mode);
-        val duration: TextView = itemView.findViewById(R.id.match_duration);
+        val heroIcon: ImageView = itemView.findViewById(R.id.match_hero_icon)
+        val outcome: TextView = itemView.findViewById(R.id.match_outcome)
+        val score: TextView = itemView.findViewById(R.id.match_score)
+        val mode: TextView = itemView.findViewById(R.id.match_mode)
+        val duration: TextView = itemView.findViewById(R.id.match_duration)
 
         init {
             itemView.setOnClickListener { }
         }
-
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_match, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_recent_match, parent, false)
         return MatchesViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MatchesViewHolder, position: Int) {
-
-        val winColor = ContextCompat.getColor(holder.itemView.context, R.color.winColor)
-        val lossColor = ContextCompat.getColor(holder.itemView.context, R.color.lossColor)
         val currentItem = dataSet[position]
-        val outcome =
-            if ((currentItem.player_slot < 100) xor currentItem.radiant_win) "Loss" else "Win"
-        if (outcome == "Win") holder.outcome.setTextColor(winColor) else holder.outcome.setTextColor(
-            lossColor
-        )
-
 
         val heroName = getHeroNameByRecentMatchesIndex(dataSetHeroes, dataSet, position)
         val resId = getResourceId(holder.itemView.context, heroName)
 
         holder.heroIcon.setImageResource(resId)
-        holder.outcome.text = outcome
+        holder.outcome.text = getOutcome(holder, currentItem.player_slot, currentItem.radiant_win)
         holder.score.text = "${currentItem.kills}/${currentItem.deaths}/${currentItem.assists}"
         holder.mode.text = getGamemodeName(currentItem.game_mode)
         holder.duration.text = getDurationHMS(currentItem.duration)
-
-
     }
 
     override fun getItemCount() = dataSet.size
 
-    private fun getHeroNameByRecentMatchesIndex(data: List<Hero>, data2: List<RecentMatches>, i: Int): String {
-        val name = data.firstOrNull { v -> v.id == data2[i].hero_id }?.name ?: ""
+    private fun getHeroNameByRecentMatchesIndex(
+        data: List<Hero>,
+        data2: List<RecentMatches>,
+        i: Int
+    ): String {
+        val name = data.firstOrNull { it.id == data2[i].hero_id }?.name ?: ""
         return "ic_${name}"
     }
+
     private fun getResourceId(context: Context, resName: String): Int {
         return context.resources.getIdentifier(resName, "mipmap", context.packageName)
+    }
+
+    private fun getOutcome(holder: MatchesViewHolder, slot: Int, radiantWin: Boolean): String {
+        val winColor = ContextCompat.getColor(holder.itemView.context, R.color.winColor)
+        val lossColor = ContextCompat.getColor(holder.itemView.context, R.color.lossColor)
+
+        val outcome = if ((slot < 100) xor radiantWin) "Loss" else "Win"
+
+        if (outcome == "Win") holder.outcome.setTextColor(winColor) else holder.outcome.setTextColor(
+            lossColor
+        )
+        return outcome
     }
 
     private fun getGamemodeName(gamemode: Int): String {

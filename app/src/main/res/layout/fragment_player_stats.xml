@@ -28,7 +28,7 @@
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
             android:layout_height="276dp"
-            tools:listitem="@layout/item_match"
+            tools:listitem="@layout/item_recent_match"
             android:id="@+id/matches_recycler_view">
 
         </androidx.recyclerview.widget.RecyclerView>

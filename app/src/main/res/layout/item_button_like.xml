@@ -4,5 +4,5 @@
     android:layout_gravity="bottom|end"
     android:layout_marginBottom="6dp"
     android:layout_marginEnd="6dp"
-    android:background="@drawable/playerstats_button_like"
+    android:background="@drawable/button_like"
     android:src="@drawable/ic_like" />

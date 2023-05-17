@@ -27,4 +27,7 @@
     <string name="button_show_all">Show all</string>
     <string name="btn_logout">Log out</string>
     <string name="btn_editProfile">Edit profile</string>
+    <string name="empty_time">--:--</string>
+    <string name="radiant_victory">Radiant Victory</string>
+    <string name="dire_victory">Dire Victory</string>
 </resources>

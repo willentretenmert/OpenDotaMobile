@@ -23,4 +23,6 @@
     <color name="itemBackground2">#393939</color>
     <color name="commentBackground">#686868</color>
     <color name="buttonLike">#D8B22A</color>
+    <color name="buttonDelete">#C10720</color>
+    <color name="netWorth">#FFC107</color>
 </resources>

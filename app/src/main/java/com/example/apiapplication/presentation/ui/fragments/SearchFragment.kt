@@ -1,6 +1,8 @@
 package com.example.apiapplication.presentation.ui.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +23,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
+    private var isBackPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchPlayerBtn.setOnClickListener {
-
             if (binding.searchBar.text.trim().isNotBlank()) {
                 val action = SearchFragmentDirections
                     .actionSearchFragmentToPlayerStatsFragment( binding.searchBar.text.toString() )
@@ -49,6 +51,31 @@ class SearchFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
             }
+        }
+        binding.searchMatchBtn.setOnClickListener {
+            if (binding.searchBar.text.trim().isNotBlank()) {
+                val action = SearchFragmentDirections
+                    .actionSearchFragmentToMatchStatsFragment( binding.searchBar.text.toString() )
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+    fun handleOnBackPressed() {
+        if (isBackPressed) {
+            requireActivity().finish()
+        } else {
+            isBackPressed = true
+            Toast.makeText(
+                requireContext(),
+                "Нажмите еще раз, чтобы выйти",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            Handler(Looper.getMainLooper())
+                .postDelayed({ isBackPressed = false }, 2000)
         }
     }
 }

@@ -17,7 +17,6 @@ import com.example.apiapplication.databinding.FragmentPlayerStatsBinding
 import com.example.apiapplication.presentation.ui.adapters.MatchesAdapter
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -25,9 +24,9 @@ class PlayerStatsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayerStatsBinding
     private lateinit var viewModel: PlayerStatsViewModel
-    private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
     private lateinit var matchesAdapter: MatchesAdapter
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var matchesRecyclerView: RecyclerView
+    private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +48,9 @@ class PlayerStatsFragment : Fragment() {
 
         val args: PlayerStatsFragmentArgs by navArgs()
         val id = args.playerId
-        recyclerView = view.findViewById(R.id.matches_recycler_view)
-        matchesAdapter = MatchesAdapter(emptyList(),emptyList())
-        recyclerView.apply {
+        matchesRecyclerView = view.findViewById(R.id.matches_recycler_view)
+        matchesAdapter = MatchesAdapter(emptyList(), emptyList())
+        matchesRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = matchesAdapter
         }
@@ -61,16 +60,20 @@ class PlayerStatsFragment : Fragment() {
             viewModel.fetchHeroes()
             viewModel.fetchPlayerStats(id)
             viewModel.fetchRecentMatches(id)
-
         }
 
         //view updating
         viewLifecycleOwner.lifecycleScope.launch {
-            collectPlayerProfile { playerStatsNickname, playerAvatarURL, playersRank ->
-                binding.playerstats.playerstatsNickname.text = playerStatsNickname
+            collectPlayerAvatar { playerAvatarURL ->
                 Glide.with(binding.playerstats.profileBriefing.userProfilePicture.context)
                     .load(playerAvatarURL)
                     .into(binding.playerstats.profileBriefing.userProfilePicture)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            collectPlayerProfile { playerStatsNickname, playerAvatarURL, playersRank ->
+                binding.playerstats.playerstatsNickname.text = playerStatsNickname
                 val resId = resources.getIdentifier(playersRank, "mipmap", context?.packageName)
                 binding.playerstats.playerstatsRank.setImageResource(resId)
             }
@@ -119,13 +122,13 @@ class PlayerStatsFragment : Fragment() {
 
     }
 
-
     private suspend fun collectPlayerHeroStats(onHeroDataReady: (Int, String, String, String) -> Unit) {
         val heroes = viewModel.heroes.first { it.isNotEmpty() }
         viewModel.playersHeroStats.collect { playersHeroStats ->
             if (playersHeroStats.size >= 3) {
                 for (i in 0..2) {
-                    val heroName = viewModel.getHeroNameByPlayerStatsIndex(heroes, playersHeroStats, i)
+                    val heroName =
+                        viewModel.getHeroNameByPlayerStatsIndex(heroes, playersHeroStats, i)
                     val heroGames = viewModel.getHeroGames(playersHeroStats, i)
                     val heroWinrate = viewModel.getHeroWinrate(playersHeroStats, i)
                     onHeroDataReady(i, heroName, heroGames, heroWinrate)
@@ -148,6 +151,13 @@ class PlayerStatsFragment : Fragment() {
         }
     }
 
+    private suspend fun collectPlayerAvatar(onPlayerDataReady: (String) -> Unit) {
+        viewModel.playersProfile.collect { playersProfile ->
+            val playerAvatarURL = viewModel.getPlayersAvatar(playersProfile)
+            onPlayerDataReady(playerAvatarURL)
+        }
+    }
+
     private suspend fun collectPlayerWRMP(onPlayerDataReady: (Int, String) -> Unit) {
         viewModel.playersWinrate.collect { PlayersWinrate ->
             val playersWinrate = viewModel.getPlayersWinrate(PlayersWinrate)
@@ -160,7 +170,7 @@ class PlayerStatsFragment : Fragment() {
         val heroes = viewModel.heroes.first { it.isNotEmpty() }
         viewModel.recentMatches.collect { recentMatches ->
             matchesAdapter = MatchesAdapter(heroes, recentMatches)
-            recyclerView.adapter = matchesAdapter
+            matchesRecyclerView.adapter = matchesAdapter
         }
     }
 

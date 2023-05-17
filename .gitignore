@@ -52,3 +52,11 @@ google-services.json
 .idea/misc.xml
 *.properties
 local.properties
+.gradle/8.0/executionHistory/executionHistory.bin
+.gradle/8.0/executionHistory/executionHistory.lock
+.gradle/8.0/fileHashes/fileHashes.bin
+.gradle/8.0/fileHashes/fileHashes.lock
+.gradle/8.0/fileHashes/resourceHashesCache.bin
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/outputFiles.bin
+.gradle/file-system.probe

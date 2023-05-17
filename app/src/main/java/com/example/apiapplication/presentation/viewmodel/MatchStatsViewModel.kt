@@ -3,10 +3,9 @@ package com.example.apiapplication.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.apiapplication.data.Hero
-import com.example.apiapplication.data.MatchStats
-import com.example.apiapplication.data.OpenDotaAPI
-import com.example.apiapplication.data.RecentMatches
+import com.example.apiapplication.data.models.Hero
+import com.example.apiapplication.data.models.MatchStats
+import com.example.apiapplication.data.api.OpenDotaAPI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow

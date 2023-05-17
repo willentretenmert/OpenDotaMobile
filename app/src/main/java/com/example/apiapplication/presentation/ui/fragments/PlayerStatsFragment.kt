@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentPlayerStatsBinding
+import com.example.apiapplication.presentation.ui.adapters.CommentsAdapter
 import com.example.apiapplication.presentation.ui.adapters.MatchesAdapter
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +27,8 @@ class PlayerStatsFragment : Fragment() {
     private lateinit var viewModel: PlayerStatsViewModel
     private lateinit var matchesAdapter: MatchesAdapter
     private lateinit var matchesRecyclerView: RecyclerView
+    private lateinit var commentsAdapter: CommentsAdapter
+    private lateinit var commentsRecyclerView: RecyclerView
     private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +45,14 @@ class PlayerStatsFragment : Fragment() {
         bottomNavigation?.visibility = View.VISIBLE
         return binding.root
     }
-//7145036443
+
+    //7145036443
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val args: PlayerStatsFragmentArgs by navArgs()
         val id = args.playerId
+
         matchesRecyclerView = view.findViewById(R.id.matches_recycler_view)
         matchesAdapter = MatchesAdapter(emptyList(), emptyList())
         matchesRecyclerView.apply {
@@ -55,9 +60,17 @@ class PlayerStatsFragment : Fragment() {
             adapter = matchesAdapter
         }
 
+        commentsRecyclerView = view.findViewById(R.id.comments_recycler_view)
+        commentsAdapter = CommentsAdapter(emptyList())
+        commentsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = commentsAdapter
+        }
+
         //fetching api requests
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchHeroes()
+            viewModel.fetchSteamIDProfile(id)
             viewModel.fetchPlayerStats(id)
             viewModel.fetchRecentMatches(id)
         }
@@ -72,7 +85,7 @@ class PlayerStatsFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            collectPlayerProfile { playerStatsNickname, playerAvatarURL, playersRank ->
+            collectPlayerProfile { playerStatsNickname, playersRank ->
                 binding.playerstats.playerstatsNickname.text = playerStatsNickname
                 val resId = resources.getIdentifier(playersRank, "mipmap", context?.packageName)
                 binding.playerstats.playerstatsRank.setImageResource(resId)
@@ -119,6 +132,10 @@ class PlayerStatsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             collectRecentMatches()
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            collectComments()
+        }
+
 
     }
 
@@ -138,16 +155,17 @@ class PlayerStatsFragment : Fragment() {
     }
 
     // 1068042013 - sasha
+    // 191345078 - kolya
     // 275690206 - zhenya
     // 228759689 - dima
     // 132697251 - shustr
     // 121473493 - max
-    private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String, String) -> Unit) {
+    // 303880693 - vlad
+    private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String) -> Unit) {
         viewModel.playersProfile.collect { playersProfile ->
             val playerStatsNickname = viewModel.getPlayersPersonaName(playersProfile)
-            val playerAvatarURL = viewModel.getPlayersAvatar(playersProfile)
             val playersRank = viewModel.getPlayersRank(playersProfile)
-            onPlayerDataReady(playerStatsNickname, playerAvatarURL, playersRank)
+            onPlayerDataReady(playerStatsNickname, playersRank)
         }
     }
 
@@ -172,6 +190,13 @@ class PlayerStatsFragment : Fragment() {
             matchesAdapter = MatchesAdapter(heroes, recentMatches)
             matchesRecyclerView.adapter = matchesAdapter
         }
+    }
+
+    private suspend fun collectComments() {
+        val comments = viewModel.steamComments.first { it.isNotEmpty() }
+
+        commentsAdapter.updateData(comments)
+
     }
 
 

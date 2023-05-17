@@ -68,7 +68,7 @@
         android:id="@+id/favouritesFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.FavouritesFragment"
         android:label="FavouritesFragment"
-        tools:layout="@layout/fragment_favourites"/>
+        tools:layout="@layout/fragment_favourites" />
     <fragment
         android:id="@+id/matchStatsFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.MatchStatsFragment"

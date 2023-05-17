@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
-import com.example.apiapplication.data.Hero
-import com.example.apiapplication.data.MatchStats
+import com.example.apiapplication.data.models.Hero
+import com.example.apiapplication.data.models.MatchStats
 
 class MatchHeroesAdapter(
     private var dataSetHeroes: List<Hero>,

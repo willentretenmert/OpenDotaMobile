@@ -1,15 +1,15 @@
 package com.example.apiapplication.presentation.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.apiapplication.data.Hero
-import com.example.apiapplication.data.OpenDotaAPI
-import com.example.apiapplication.data.PlayersHeroStats
-import com.example.apiapplication.data.PlayersProfile
-import com.example.apiapplication.data.PlayersWinrate
-import com.example.apiapplication.data.RecentMatches
-import com.google.gson.Gson
+import com.example.apiapplication.data.models.Hero
+import com.example.apiapplication.data.api.OpenDotaAPI
+import com.example.apiapplication.data.api.RaspberryAPI
+import com.example.apiapplication.data.models.DotaUserRaspberry
+import com.example.apiapplication.data.models.PlayersHeroStats
+import com.example.apiapplication.data.models.PlayersProfile
+import com.example.apiapplication.data.models.PlayersWinrate
+import com.example.apiapplication.data.models.RecentMatches
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +17,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.URL
 
 
 class PlayerStatsViewModel : ViewModel() {
-
+    
+    private val _steamComments = MutableStateFlow<List<DotaUserRaspberry.Comment>>(emptyList())
+    val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> = _steamComments
 
     private val _heroes = MutableStateFlow<List<Hero>>(emptyList())
     val heroes: StateFlow<List<Hero>> = _heroes
@@ -44,6 +45,23 @@ class PlayerStatsViewModel : ViewModel() {
         .build()
 
     private val api = retrofit.create(OpenDotaAPI::class.java)
+
+    private val retrofit2 = Retrofit.Builder()
+        .baseUrl("http://176.99.158.188:50993/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api2 = retrofit2.create(RaspberryAPI::class.java)
+
+    fun fetchSteamIDProfile(id: CharSequence) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val steamIDProfileDeferred = async { api2.getSteamIDProfile("dotaProfile", id) }
+
+            val steamIDProfile = steamIDProfileDeferred.await()
+
+            _steamComments.value = steamIDProfile.data
+        }
+    }
 
     // gets a json string of dota heroes
     fun fetchHeroes() {
@@ -83,6 +101,7 @@ class PlayerStatsViewModel : ViewModel() {
             _playersWinrate.value = playerWinrate
         }
     }
+
 
     // returns hero original name requiring a hero list and player's personal statistics list
     fun getHeroNameByPlayerStatsIndex(data: List<Hero>, data2: List<PlayersHeroStats>, i: Int): String {

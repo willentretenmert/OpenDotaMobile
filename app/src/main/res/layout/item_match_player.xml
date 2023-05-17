@@ -33,6 +33,7 @@
             android:gravity="center"
             android:text="-/-/-"
             android:fontFamily="@font/inter_extrabold"
+            android:textSize="12sp"
             android:textColor="@color/white" />
 
         <TextView
@@ -44,6 +45,7 @@
             android:gravity="center"
             android:fontFamily="@font/inter_extrabold"
             android:text="---"
+            android:textSize="12sp"
             android:textColor="@color/netWorth" />
 
         <LinearLayout

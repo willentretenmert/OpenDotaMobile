@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
-import com.example.apiapplication.data.Hero
-import com.example.apiapplication.data.RecentMatches
+import com.example.apiapplication.data.models.Hero
+import com.example.apiapplication.data.models.RecentMatches
 
 
 class MatchesAdapter(

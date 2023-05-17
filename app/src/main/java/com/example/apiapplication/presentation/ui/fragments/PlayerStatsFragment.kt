@@ -42,7 +42,7 @@ class PlayerStatsFragment : Fragment() {
         bottomNavigation?.visibility = View.VISIBLE
         return binding.root
     }
-
+//7145036443
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -138,8 +138,8 @@ class PlayerStatsFragment : Fragment() {
     }
 
     // 1068042013 - sasha
-    // 275690206 - dima
-    // 228759689 - hz
+    // 275690206 - zhenya
+    // 228759689 - dima
     // 132697251 - shustr
     // 121473493 - max
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String, String) -> Unit) {

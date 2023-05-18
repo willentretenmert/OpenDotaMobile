@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentLoginBinding
 import com.example.apiapplication.presentation.ui.activity.MainActivity
@@ -25,6 +26,9 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
 
+    private var login: String? = null
+    private var password: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,31 +37,43 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigation?.visibility = View.INVISIBLE
+
+        try {
+            val args: LoginFragmentArgs by navArgs()
+            login = args.login
+            password = args.password
+            binding.editTextLogin.setText(login)
+            binding.editTextPassword.setText(password)
+        } finally {
+
+        }
         viewModel.checkAuth()
-        binding.signupButton.setOnClickListener() {findNavController().navigate(R.id.action_loginFragment_to_signupFragment)}
+        setEventListener()
         viewLifecycleOwner.lifecycleScope.launch { setObserver() }
         return binding.root
     }
+
+    private fun setEventListener() {
+        binding.signupButton.setOnClickListener() {findNavController().navigate(R.id.action_loginFragment_to_signupFragment)}
+        binding.loginButton.setOnClickListener {
+            if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
+                val login = binding.editTextLogin.text.toString()
+                val password = binding.editTextPassword.text.toString()
+                binding.editTextLogin.text.clear()
+                binding.editTextPassword.text.clear()
+                viewModel.getAuth(login, password) { loginResult ->
+                    if (loginResult) findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
+                    else Toast.makeText(context,"Authentication failed.",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private suspend fun setObserver() {
         viewModel.isLoginSuccessful.collect() {
             if (it == true) {
                 findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
-                val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
-                bottomNavigation?.visibility = View.VISIBLE
-            } else {
-                binding.loginButton.setOnClickListener {
-                    if (binding.editTextLogin.text.isNotBlank() and binding.editTextPassword.text.isNotBlank()) {
-                        val login = binding.editTextLogin.text.toString()
-                        val password = binding.editTextPassword.text.toString()
-                        binding.editTextLogin.text.clear()
-                        binding.editTextPassword.text.clear()
-                        viewModel.getAuth(login, password) { loginResult ->
-                            if (loginResult) findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
-                            else Toast.makeText(context,"Authentication failed.",Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
             }
         }
     }

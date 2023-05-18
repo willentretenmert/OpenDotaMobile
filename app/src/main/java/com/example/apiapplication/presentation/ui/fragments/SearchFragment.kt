@@ -54,8 +54,7 @@ class SearchFragment : Fragment() {
         }
         binding.searchMatchBtn.setOnClickListener {
             if (binding.searchBar.text.trim().isNotBlank()) {
-                val action = SearchFragmentDirections
-                    .actionSearchFragmentToMatchStatsFragment( binding.searchBar.text.toString() )
+                val action = SearchFragmentDirections.actionSearchFragmentToMatchStatsFragment( binding.searchBar.text.toString() )
                 findNavController().navigate(action)
             } else {
                 Toast.makeText(requireContext(), getString(R.string.tv_err), Toast.LENGTH_SHORT).show()

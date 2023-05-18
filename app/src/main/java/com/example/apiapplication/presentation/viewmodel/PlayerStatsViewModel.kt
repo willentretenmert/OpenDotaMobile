@@ -1,15 +1,17 @@
 package com.example.apiapplication.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.api.OpenDotaAPI
 import com.example.apiapplication.data.api.RaspberryAPI
 import com.example.apiapplication.data.models.DotaUserRaspberry
+import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.PlayersHeroStats
 import com.example.apiapplication.data.models.PlayersProfile
 import com.example.apiapplication.data.models.PlayersWinrate
 import com.example.apiapplication.data.models.RecentMatches
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class PlayerStatsViewModel : ViewModel() {
-    
+
+    private val _steamIDProfile = MutableStateFlow<DotaUserRaspberry?>(null)
+    val steamIDProfile: StateFlow<DotaUserRaspberry?> = _steamIDProfile
+
+
     private val _steamComments = MutableStateFlow<List<DotaUserRaspberry.Comment>>(emptyList())
     val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> = _steamComments
+
 
     private val _heroes = MutableStateFlow<List<Hero>>(emptyList())
     val heroes: StateFlow<List<Hero>> = _heroes
@@ -39,19 +46,25 @@ class PlayerStatsViewModel : ViewModel() {
     private val _recentMatches = MutableStateFlow<List<RecentMatches>>(emptyList())
     val recentMatches: StateFlow<List<RecentMatches>> = _recentMatches
 
+
+
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.opendota.com/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
     private val api = retrofit.create(OpenDotaAPI::class.java)
+
+    var gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     private val retrofit2 = Retrofit.Builder()
         .baseUrl("http://176.99.158.188:50993/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
     private val api2 = retrofit2.create(RaspberryAPI::class.java)
+
+
 
     fun fetchSteamIDProfile(id: CharSequence) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -59,7 +72,36 @@ class PlayerStatsViewModel : ViewModel() {
 
             val steamIDProfile = steamIDProfileDeferred.await()
 
+            _steamIDProfile.value = steamIDProfile
             _steamComments.value = steamIDProfile.data
+        }
+    }
+
+    fun postComment(author: String, content: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentProfile = steamIDProfile.value
+
+            val newComment = DotaUserRaspberry.Comment(content, author)
+
+            val updatedData =
+                currentProfile?.data?.toMutableList()?.apply { add(newComment) } ?: listOf(
+                    newComment
+                )
+
+            val updatedProfile = currentProfile?.copy(data = updatedData)
+
+            val response = api2.postSteamIDProfile(updatedProfile!!)
+
+            val jsonString = response.body().toString()
+            Log.d("zxc", jsonString)
+
+            if (response.isSuccessful) {
+                Log.d("zxc3", "success")
+                _steamIDProfile.value = response.body()
+                _steamComments.value = response.body()?.data ?: emptyList()
+            } else {
+                Log.d("zxc3", "response not successful")
+            }
         }
     }
 
@@ -104,7 +146,11 @@ class PlayerStatsViewModel : ViewModel() {
 
 
     // returns hero original name requiring a hero list and player's personal statistics list
-    fun getHeroNameByPlayerStatsIndex(data: List<Hero>, data2: List<PlayersHeroStats>, i: Int): String {
+    fun getHeroNameByPlayerStatsIndex(
+        data: List<Hero>,
+        data2: List<PlayersHeroStats>,
+        i: Int
+    ): String {
         val name = data.firstOrNull { v -> v.id == data2[i].hero_id }?.name ?: ""
         return "ic_${name}"
     }

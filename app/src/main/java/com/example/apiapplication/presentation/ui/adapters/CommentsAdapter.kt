@@ -36,8 +36,8 @@ class CommentsAdapter(
 
     override fun getItemCount() = dataSet.size
 
-    fun updateData(newHeroes: List<DotaUserRaspberry.Comment>) {
-        this.dataSet = newHeroes
+    fun updateData(newComments: List<DotaUserRaspberry.Comment>) {
+        this.dataSet = newComments
         notifyDataSetChanged()
     }
 }

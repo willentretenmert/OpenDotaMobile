@@ -30,4 +30,6 @@
     <string name="empty_time">--:--</string>
     <string name="radiant_victory">Radiant Victory</string>
     <string name="dire_victory">Dire Victory</string>
+    <string name="tv_recent_matches">Recent matches:</string>
+    <string name="tv_commentstv">Comments (--):</string>
 </resources>

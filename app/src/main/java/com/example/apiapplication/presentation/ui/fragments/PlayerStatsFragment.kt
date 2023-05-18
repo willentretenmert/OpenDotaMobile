@@ -136,6 +136,14 @@ class PlayerStatsFragment : Fragment() {
             collectComments()
         }
 
+        binding.sendBtn.setOnClickListener {
+            viewModel.postComment("QWERTY", binding.editTextNewComment.text.toString())
+            binding.editTextNewComment.text.clear()
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                collectComments()
+            }
+        }
 
     }
 
@@ -196,7 +204,7 @@ class PlayerStatsFragment : Fragment() {
         val comments = viewModel.steamComments.first { it.isNotEmpty() }
 
         commentsAdapter.updateData(comments)
-
+        binding.tvCommentstv.text = "Comments (${commentsAdapter.itemCount}):"
     }
 
 

@@ -48,7 +48,6 @@ class PlayerStatsFragment : Fragment() {
         return binding.root
     }
 
-    //7145036443
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -174,6 +173,8 @@ class PlayerStatsFragment : Fragment() {
     // 132697251 - shustr
     // 121473493 - max
     // 303880693 - vlad
+    // 7145036443
+
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String) -> Unit) {
         viewModel.playersProfile.collect { playersProfile ->
             val playerStatsNickname = viewModel.getPlayersPersonaName(playersProfile)
@@ -190,7 +191,7 @@ class PlayerStatsFragment : Fragment() {
     }
 
     private suspend fun collectPlayerWRMP(onPlayerDataReady: (Int, String) -> Unit) {
-        viewModel.playersWinrate.collect { PlayersWinrate ->
+        viewModel.playersWinRate.collect { PlayersWinrate ->
             val playersWinrate = viewModel.getPlayersWinrate(PlayersWinrate)
             val playersTotalMP = viewModel.getPlayersTotal(PlayersWinrate)
             onPlayerDataReady(playersWinrate, playersTotalMP)
@@ -216,6 +217,5 @@ class PlayerStatsFragment : Fragment() {
         } catch (e: Exception) {
             Log.e("zxc", e.toString())
         }
-
     }
 }

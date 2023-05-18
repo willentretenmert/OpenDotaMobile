@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
 import com.example.apiapplication.data.api.OpenDotaAPI
+import com.example.apiapplication.networking.OpenDotaApiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,40 +20,18 @@ import java.util.Locale
 
 class MatchStatsViewModel : ViewModel() {
 
-    private val _heroes = MutableStateFlow<List<Hero>>(emptyList())
-    val heroes: StateFlow<List<Hero>> = _heroes
+    val apiProvider = OpenDotaApiProvider()
 
-    private val _matchStats = MutableStateFlow<MatchStats?>(null)
-    val matchStats: StateFlow<MatchStats?> = _matchStats
-
-    private val _players = MutableStateFlow<List<MatchStats.Player>>(emptyList())
-    val players: StateFlow<List<MatchStats.Player>> = _players
-
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.opendota.com/api/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val api = retrofit.create(OpenDotaAPI::class.java)
+    val heroes: StateFlow<List<Hero>> = apiProvider.heroes
+    val matchStats: StateFlow<MatchStats?> = apiProvider.matchStats
+    val players: StateFlow<List<MatchStats.Player>> = apiProvider.players
 
     fun fetchHeroes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val heroesDeferred = async { api.getHeroes() }
-            val heroes = heroesDeferred.await()
-
-            _heroes.value = heroes.toList()
-        }
+        apiProvider.fetchHeroes()
     }
 
     fun fetchMatchStats(id: CharSequence) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val matchStatsDeferred = async { api.getMatch(id) }
-            val matchStats = matchStatsDeferred.await()
-
-            _matchStats.value = matchStats
-            _players.value = matchStats.players
-        }
+        apiProvider.fetchMatchStats(id)
     }
 
     fun getMatchStartDate(data: MatchStats?): String {
@@ -73,6 +52,4 @@ class MatchStatsViewModel : ViewModel() {
     fun getOutcome(data: MatchStats?): Boolean? {
         return data?.radiant_win
     }
-
-
 }

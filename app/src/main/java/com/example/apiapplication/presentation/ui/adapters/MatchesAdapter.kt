@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.RecentMatches
+import com.example.apiapplication.presentation.viewmodel.FavouritesViewModel
 
 
 class MatchesAdapter(
@@ -43,6 +44,11 @@ class MatchesAdapter(
 
         val heroName = getHeroNameByRecentMatchesIndex(dataSetHeroes, dataSet, position)
         val resId = getResourceId(holder.itemView.context, heroName)
+
+
+
+
+
 
         holder.heroIcon.setImageResource(resId)
         holder.outcome.text = getOutcome(holder, currentItem.player_slot, currentItem.radiant_win)

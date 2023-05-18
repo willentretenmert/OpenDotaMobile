@@ -63,25 +63,6 @@ class PlayerStatsViewModel : ViewModel() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-
-//        try {
-//            val service = retrofit2.create(RaspberryAPI::class.java)
-//            val response = service.postSteamIDProfile()  // Замените на ваш метод API
-//            // Обработка ответа
-//        } catch (exception: Exception) {
-//            when (exception) {
-//                is SocketTimeoutException -> {
-//                    // Обработка исключения SocketTimeoutException
-//                }
-//                is IOException -> {
-//                    // Обработка других исключений ввода-вывода
-//                }
-//                else -> {
-//                    // Обработка всех остальных исключений
-//                }
-//            }
-
-
     private val api2 = try {
         retrofit2.create(RaspberryAPI::class.java)
     } catch (e: Exception) {

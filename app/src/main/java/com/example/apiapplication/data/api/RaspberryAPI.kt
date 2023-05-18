@@ -23,4 +23,8 @@ interface RaspberryAPI {
     @Headers("Content-Type: application/json")
     @POST("insert")
     suspend fun postSteamIDProfile(@Body steamProfile: DotaUserRaspberry?): Response<DotaUserRaspberry>
+
+    @Headers("Content-Type: application/json")
+    @POST("insert")
+    suspend fun postFirebaseProfile(@Body firebaseProfile: FirebaseUserRaspberry?): Response<FirebaseUserRaspberry>
 }

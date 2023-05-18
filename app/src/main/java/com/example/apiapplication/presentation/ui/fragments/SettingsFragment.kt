@@ -26,7 +26,7 @@ class SettingsFragment : Fragment(){
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
         bottomNavigation?.visibility = View.VISIBLE
-        binding.username.setText(MainActivity.User.auth.currentUser?.email.toString())
+        binding.username.setText(MainActivity.User.auth.currentUser!!.email.toString())
         setEventListener()
         return binding.root
     }

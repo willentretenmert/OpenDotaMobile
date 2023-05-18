@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.SocketTimeoutException
 
 
 class PlayerStatsViewModel : ViewModel() {
@@ -47,7 +48,6 @@ class PlayerStatsViewModel : ViewModel() {
     val recentMatches: StateFlow<List<RecentMatches>> = _recentMatches
 
 
-
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.opendota.com/api/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -62,48 +62,95 @@ class PlayerStatsViewModel : ViewModel() {
         .baseUrl("http://176.99.158.188:50993/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val api2 = retrofit2.create(RaspberryAPI::class.java)
 
 
+//        try {
+//            val service = retrofit2.create(RaspberryAPI::class.java)
+//            val response = service.postSteamIDProfile()  // Замените на ваш метод API
+//            // Обработка ответа
+//        } catch (exception: Exception) {
+//            when (exception) {
+//                is SocketTimeoutException -> {
+//                    // Обработка исключения SocketTimeoutException
+//                }
+//                is IOException -> {
+//                    // Обработка других исключений ввода-вывода
+//                }
+//                else -> {
+//                    // Обработка всех остальных исключений
+//                }
+//            }
 
-    fun fetchSteamIDProfile(id: CharSequence) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val steamIDProfileDeferred = async { api2.getSteamIDProfile("dotaProfile", id) }
 
-            val steamIDProfile = steamIDProfileDeferred.await()
+    private val api2 = try {
+        retrofit2.create(RaspberryAPI::class.java)
+    } catch (e: Exception) {
+        when (e) {
+            is SocketTimeoutException -> {
+                Log.d("zxc", "timed out")
+                null
+            }
 
-            _steamIDProfile.value = steamIDProfile
-            _steamComments.value = steamIDProfile.data
-        }
-    }
-
-    fun postComment(author: String, content: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val currentProfile = steamIDProfile.value
-
-            val newComment = DotaUserRaspberry.Comment(content, author)
-
-            val updatedData =
-                currentProfile?.data?.toMutableList()?.apply { add(newComment) } ?: listOf(
-                    newComment
-                )
-
-            val updatedProfile = currentProfile?.copy(data = updatedData)
-
-            val response = api2.postSteamIDProfile(updatedProfile!!)
-
-            val jsonString = response.body().toString()
-            Log.d("zxc", jsonString)
-
-            if (response.isSuccessful) {
-                Log.d("zxc3", "success")
-                _steamIDProfile.value = response.body()
-                _steamComments.value = response.body()?.data ?: emptyList()
-            } else {
-                Log.d("zxc3", "response not successful")
+            else -> {
+                Log.d("zxc", "some exception")
+                null
             }
         }
     }
+
+
+    fun fetchSteamIDProfile(id: CharSequence) {
+        if (api2 != null)
+            viewModelScope.launch(Dispatchers.IO) {
+                val steamIDProfileDeferred = async { api2.getSteamIDProfile("dotaProfile", id) }
+
+                val steamIDProfile = steamIDProfileDeferred.await()
+
+                _steamIDProfile.value = steamIDProfile //null if error
+                _steamComments.value = steamIDProfile.data //null if error
+            }
+    }
+
+    fun postComment(id: String, author: String, content: String, callback: (Boolean) -> Unit) {
+        if (api2 != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val newComment = DotaUserRaspberry.Comment(content, author)
+
+                if (steamIDProfile.value?._steam_id != null) {
+                    val currentProfile = steamIDProfile.value
+
+                    val updatedData = currentProfile?.data?.toMutableList()?.apply { add(newComment) } ?: listOf(newComment)
+
+                    val updatedProfile = currentProfile?.copy(data = updatedData)
+
+                    val response = api2.postSteamIDProfile(updatedProfile!!)
+
+                    if (response.isSuccessful) {
+                        _steamIDProfile.value = updatedProfile
+                        _steamComments.value = updatedData
+                        Log.d("zxc", "new comment posted to the current profile $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    val newProfile = DotaUserRaspberry(id, listOf(newComment))
+
+                    val response = api2.postSteamIDProfile(newProfile)
+
+                    if (response.isSuccessful) {
+                        _steamIDProfile.value = newProfile
+                        _steamComments.value = listOf(newComment)
+                        Log.d("zxc", "new comment posted to a new profile $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
+    }
+
 
     // gets a json string of dota heroes
     fun fetchHeroes() {

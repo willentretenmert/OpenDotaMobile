@@ -1,6 +1,7 @@
 package com.example.apiapplication.presentation.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class PlayerStatsFragment : Fragment() {
 
@@ -136,12 +138,15 @@ class PlayerStatsFragment : Fragment() {
             collectComments()
         }
 
+        // sending a new comment
         binding.sendBtn.setOnClickListener {
-            viewModel.postComment("QWERTY", binding.editTextNewComment.text.toString())
-            binding.editTextNewComment.text.clear()
-
-            viewLifecycleOwner.lifecycleScope.launch {
-                collectComments()
+            viewModel.postComment(id, "QWERTY", binding.editTextNewComment.text.toString()) { success ->
+                if (success) {
+                    binding.editTextNewComment.text.clear()
+                }
+                viewLifecycleOwner.lifecycleScope.launch {
+                    collectComments()
+                }
             }
         }
 
@@ -201,11 +206,16 @@ class PlayerStatsFragment : Fragment() {
     }
 
     private suspend fun collectComments() {
-        val comments = viewModel.steamComments.first { it.isNotEmpty() }
+        try {
+            viewModel.steamComments.collect { comments ->
+                if (comments.isNotEmpty()) {
+                    commentsAdapter.updateData(comments.reversed())
+                    binding.tvCommentstv.text = "Comments (${commentsAdapter.itemCount}):"
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("zxc", e.toString())
+        }
 
-        commentsAdapter.updateData(comments)
-        binding.tvCommentstv.text = "Comments (${commentsAdapter.itemCount}):"
     }
-
-
 }

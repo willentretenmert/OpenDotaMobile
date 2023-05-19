@@ -1,12 +1,14 @@
 package com.example.apiapplication.presentation.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -172,9 +174,16 @@ class MatchStatsFragment : Fragment() {
 
             playersRadiantAdapter.updateData(heroes, radiantTeam)
             playersDireAdapter.updateData(heroes, direTeam)
+
+            playersRadiantAdapter.onItemClick = {item ->
+                val action = MatchStatsFragmentDirections.actionMatchStatsFragmentToPlayerStatsFragment( item.toString() )
+                findNavController().navigate(action)
+            }
+            playersDireAdapter.onItemClick = {item ->
+                val action = MatchStatsFragmentDirections.actionMatchStatsFragmentToPlayerStatsFragment( item.toString() )
+                findNavController().navigate(action)
+            }
         }
-
     }
-
 }
 

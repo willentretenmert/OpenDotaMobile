@@ -11,10 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.apiapplication.R
-import com.example.apiapplication.databinding.FragmentMainBinding
 import com.example.apiapplication.databinding.FragmentSearchBinding
-import com.example.apiapplication.databinding.FragmentSignUpBinding
-import com.example.apiapplication.presentation.viewmodel.MainViewModel
 import com.example.apiapplication.presentation.viewmodel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

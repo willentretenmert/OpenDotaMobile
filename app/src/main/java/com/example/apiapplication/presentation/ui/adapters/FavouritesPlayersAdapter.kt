@@ -21,7 +21,7 @@ class FavouritesPlayersAdapter(
 ) : RecyclerView.Adapter<FavouritesPlayersAdapter.FavouritesPlayersViewHolder>() {
     inner class FavouritesPlayersViewHolder(val binding: ItemPlayerstatsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val playerAvatar: ImageView = itemView.findViewById(R.id.user_avatar)
+        val playerAvatar: ImageView = itemView.findViewById(R.id.user_profile_picture)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesPlayersViewHolder {

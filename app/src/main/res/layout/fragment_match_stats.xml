@@ -22,24 +22,27 @@
             layout="@layout/item_match_briefing" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="10dp"
-            android:isScrollContainer="false"
+            android:isScrollContainer="true"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
-            android:layout_height="276dp"
+            android:minHeight="250dp"
+            android:layout_height="0dp"
             tools:listitem="@layout/item_match_player"
-            android:id="@+id/radiant_team_recycler_view">
+            android:id="@+id/radiant_team_recycler_view"
+            android:layout_weight="53">
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="10dp"
-            android:isScrollContainer="false"
+
+            android:isScrollContainer="true"
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
-            android:layout_height="276dp"
+            android:minHeight="250dp"
+            android:layout_height="0dp"
             tools:listitem="@layout/item_match_player"
-            android:id="@+id/dire_team_recycler_view" />
+            android:id="@+id/dire_team_recycler_view"
+            android:layout_weight="53" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

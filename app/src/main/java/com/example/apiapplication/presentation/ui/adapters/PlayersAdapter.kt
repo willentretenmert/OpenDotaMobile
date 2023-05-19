@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
+import com.example.apiapplication.presentation.ui.fragments.MatchStatsFragmentDirections
 
 class PlayersAdapter(
     private var dataSetHeroes: List<Hero>,
@@ -17,7 +19,9 @@ class PlayersAdapter(
 ) :
     RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() {
 
-    class PlayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var onItemClick: ((Int) -> Unit)? = null
+
+    inner class PlayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val heroIcon: ImageView = itemView.findViewById(R.id.match_player_hero_icon)
         val score: TextView = itemView.findViewById(R.id.match_player_score)
@@ -30,9 +34,10 @@ class PlayersAdapter(
         val item5: ImageView = itemView.findViewById(R.id.player_item5)
 
         init {
-            itemView.setOnClickListener { }
+            itemView.setOnClickListener() {
+                onItemClick?.invoke(dataSet[adapterPosition].account_id)
+            }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayersViewHolder {

@@ -7,7 +7,6 @@
     android:background="@color/background"
     tools:context=".presentation.ui.fragments.PlayerStatsFragment">
 
-
     <include
         android:id="@+id/playerstats"
         layout="@layout/item_playerstats"
@@ -27,43 +26,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerstats" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/matches_recycler_view"
-        class="androidx.appcompat.app.AlertController$RecycleListView"
+    <LinearLayout
+        android:id="@+id/recyclerViewContainer"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_recent_matches"
-        tools:listitem="@layout/item_recent_match">
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_recent_matches">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/matches_recycler_view"
+            android:layout_width="match_parent"
+            android:minHeight="280dp"
+            android:layout_height="0dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            tools:listitem="@layout/item_recent_match"
+            android:layout_weight="7"/>
 
-    <TextView
-        android:id="@+id/tv_commentstv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/inter"
-        android:text="@string/tv_commentstv"
-        android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/matches_recycler_view" />
+        <TextView
+            android:id="@+id/tv_commentstv"
+            android:layout_width="match_parent"
+            android:minHeight="10sp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/inter"
+            android:text="@string/tv_commentstv"
+            android:textColor="@color/gray"
+            android:layout_weight="0.6"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comments_recycler_view"
-        class="androidx.appcompat.app.AlertController$RecycleListView"
-        android:layout_width="match_parent"
-        android:layout_height="164dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_commentstv"
-        tools:listitem="@layout/item_comment" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comments_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:minHeight="164dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            tools:listitem="@layout/item_comment"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"

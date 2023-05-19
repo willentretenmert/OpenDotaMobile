@@ -4,15 +4,22 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
+import com.example.apiapplication.presentation.ui.fragments.MatchStatsFragment
+import com.example.apiapplication.presentation.ui.fragments.MatchStatsFragmentDirections
+import com.example.apiapplication.presentation.ui.fragments.SearchFragmentDirections
 
 class MatchHeroesAdapter(
     private var dataSetHeroes: List<Hero>,
     private var dataSet: List<MatchStats.Player>
+
 ) :
     RecyclerView.Adapter<MatchHeroesAdapter.MatchesHeroesViewHolder>() {
 
@@ -24,7 +31,6 @@ class MatchHeroesAdapter(
             itemView.setOnClickListener { }
             heroIcon = itemView.findViewById(R.id.match_briefing_hero_icon)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesHeroesViewHolder {

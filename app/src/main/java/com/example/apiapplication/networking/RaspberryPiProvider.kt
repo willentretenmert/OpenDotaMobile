@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.apiapplication.data.api.RaspberryAPI
 import com.example.apiapplication.data.models.DotaUserRaspberry
 import com.example.apiapplication.data.models.FirebaseUserRaspberry
-import com.example.apiapplication.data.models.MatchStats
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,12 +18,6 @@ class RaspberryPiProvider {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val _matchStats = MutableStateFlow<MatchStats?>(null)
-    val matchStats: StateFlow<MatchStats?> = _matchStats
-
-    private val _players = MutableStateFlow<List<MatchStats.Player>>(emptyList())
-    val players: StateFlow<List<MatchStats.Player>> = _players
-
     private val _steamIDProfile = MutableStateFlow<DotaUserRaspberry?>(null)
     val steamIDProfile: StateFlow<DotaUserRaspberry?> = _steamIDProfile
 
@@ -34,11 +27,15 @@ class RaspberryPiProvider {
     private val _firebaseProfile = MutableStateFlow<FirebaseUserRaspberry?>(null)
     val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = _firebaseProfile
 
-    private val _favouritesPlayers = MutableStateFlow<List<FirebaseUserRaspberry.FavouritePlayers>>(emptyList())
-    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> = _favouritesPlayers
+    private val _favouritesPlayers =
+        MutableStateFlow<List<FirebaseUserRaspberry.FavouritePlayers>>(emptyList())
+    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> =
+        _favouritesPlayers
 
-    private val _favouritesMatches = MutableStateFlow<List<FirebaseUserRaspberry.FavouriteMatches>>(emptyList())
-    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> = _favouritesMatches
+    private val _favouritesMatches =
+        MutableStateFlow<List<FirebaseUserRaspberry.FavouriteMatches>>(emptyList())
+    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> =
+        _favouritesMatches
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://176.99.158.188:50993/")
@@ -92,7 +89,10 @@ class RaspberryPiProvider {
                 if (steamIDProfile.value?._steam_id != null) {
                     val currentProfile = steamIDProfile.value
 
-                    val updatedData = currentProfile?.data?.toMutableList()?.apply { add(newComment) } ?: listOf(newComment)
+                    val updatedData =
+                        currentProfile?.data?.toMutableList()?.apply { add(newComment) } ?: listOf(
+                            newComment
+                        )
 
                     val updatedProfile = currentProfile?.copy(data = updatedData)
 
@@ -123,7 +123,8 @@ class RaspberryPiProvider {
             }
         }
     }
-    fun postFavouritePlayer (
+
+    fun postFavouritePlayer(
         userMail: String,
         nickname: String,
         playerId: String,
@@ -136,7 +137,9 @@ class RaspberryPiProvider {
                 if (firebaseProfile.value?._firebase_id != null) {
                     val currentProfile = firebaseProfile.value
 
-                    val updatedData = currentProfile?.players?.toMutableList()?.apply { add(newFavourite) } ?: listOf(newFavourite)
+                    val updatedData =
+                        currentProfile?.players?.toMutableList()?.apply { add(newFavourite) }
+                            ?: listOf(newFavourite)
 
                     val updatedProfile = currentProfile?.copy(players = updatedData)
 
@@ -145,20 +148,21 @@ class RaspberryPiProvider {
                     if (response.isSuccessful) {
                         _firebaseProfile.value = updatedProfile
                         _favouritesPlayers.value = updatedData
-                        Log.d("zxc", "new comment posted to the current profile $response")
+                        Log.d("zxc", "$playerId player added to favs in the current profile $userMail $response")
                         callback(true)
                     } else {
                         callback(false)
                     }
                 } else {
-                    val newProfile = FirebaseUserRaspberry(userMail, nickname, listOf(newFavourite), emptyList())
+                    val newProfile =
+                        FirebaseUserRaspberry(userMail, nickname, listOf(newFavourite), emptyList())
 
                     val response = api.postFirebaseProfile(newProfile)
 
                     if (response.isSuccessful) {
                         _firebaseProfile.value = newProfile
                         _favouritesPlayers.value = listOf(newFavourite)
-                        Log.d("zxc", "new comment posted to a new profile $response")
+                        Log.d("zxc", "$playerId player added to favs in the current profile $userMail 222 $response")
                         callback(true)
                     } else {
                         callback(false)
@@ -167,4 +171,40 @@ class RaspberryPiProvider {
             }
         }
     }
+
+    fun deleteFavouritePlayer(
+        userMail: String,
+        nickname: String,
+        playerId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        if (api != null) {
+            coroutineScope.launch(Dispatchers.IO) {
+
+                val currentProfile = firebaseProfile.value
+
+                val updatedData = currentProfile?.players?.toMutableList()?.apply {
+                    removeIf { it.steam_id == playerId }
+                }
+
+                if (updatedData != null) {
+                    val updatedProfile = currentProfile.copy(players = updatedData)
+
+                    val response = api.postFirebaseProfile(updatedProfile)
+
+                    if (response.isSuccessful) {
+                        _firebaseProfile.value = updatedProfile
+                        _favouritesPlayers.value = updatedData
+                        Log.d("zxc", "$playerId player removed from the current profile $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    callback(false)
+                }
+            }
+        }
+    }
+
 }

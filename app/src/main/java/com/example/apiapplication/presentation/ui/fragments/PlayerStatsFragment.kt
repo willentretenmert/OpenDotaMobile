@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.apiapplication.R
+import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.databinding.FragmentPlayerStatsBinding
 import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.ui.adapters.CommentsAdapter
@@ -22,9 +23,10 @@ import com.example.apiapplication.presentation.ui.adapters.MatchesAdapter
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlayerStatsFragment : Fragment() {
 
@@ -158,17 +160,61 @@ class PlayerStatsFragment : Fragment() {
                 }
             }
         }
+        var isFavourite: Boolean = false
 
-        binding.playerstats.addPlayerToFavsBtn.setOnClickListener {
-            viewModel.postFavouritePlayer(
-                auth.currentUser?.email.toString(),
-                "QWERTY",
-                id
-            ) { success ->
-                if (success) {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        binding.playerstats.addPlayerToFavsBtn.setBackgroundResource(R.drawable.button_delete)
-                        binding.playerstats.addPlayerToFavsBtn.setImageResource(R.drawable.ic_delete)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val favouritesPlayersFlow = viewModel.favouritesPlayers.stateIn(this)
+            favouritesPlayersFlow.collect { player ->
+                isFavourite = player.contains(FirebaseUserRaspberry.FavouritePlayers(id))
+
+                withContext(Dispatchers.Main) {
+                    binding.playerstats.addPlayerToFavsBtn.setOnClickListener {
+                        if (isFavourite) {
+                            viewModel.deleteFavouritePlayer(
+                                auth.currentUser?.email.toString(),
+                                "QWERTY",
+                                id
+                            ) { success ->
+                                if (success) {
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        withContext(Dispatchers.Main) {
+                                            binding.playerstats.addPlayerToFavsBtn.setBackgroundResource(
+                                                R.drawable.button_like
+                                            )
+                                            binding.playerstats.addPlayerToFavsBtn.setImageResource(
+                                                R.drawable.ic_like
+                                            )
+                                            isFavourite = false
+                                        }
+                                    }
+                                } else {
+                                    Log.e("zxc", "Failed to delete favourite player")
+                                }
+                            }
+                        } else {
+                            viewModel.postFavouritePlayer(
+                                auth.currentUser?.email.toString(),
+                                "QWERTY",
+                                id
+                            ) { success ->
+                                if (success) {
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        withContext(Dispatchers.Main) {
+                                            binding.playerstats.addPlayerToFavsBtn.setBackgroundResource(
+                                                R.drawable.button_delete
+                                            )
+                                            binding.playerstats.addPlayerToFavsBtn.setImageResource(
+                                                R.drawable.ic_delete
+                                            )
+                                            isFavourite = true
+                                        }
+                                    }
+                                } else {
+                                    Log.e("zxc", "Failed to add favourite player")
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -200,7 +246,7 @@ class PlayerStatsFragment : Fragment() {
     // 303880693 - vlad
     // 202417398 - ermak
     // 7145036443
-
+    // 7162122973
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String) -> Unit) {
         viewModel.playersProfile.collect { playersProfile ->
             val playerStatsNickname = viewModel.getPlayersPersonaName(playersProfile)
@@ -217,7 +263,7 @@ class PlayerStatsFragment : Fragment() {
     }
 
     private suspend fun collectPlayerWRMP(onPlayerDataReady: (Int, String) -> Unit) {
-        viewModel.playersWinRate.collect { PlayersWinrate ->
+        viewModel.playersWinrate.collect { PlayersWinrate ->
             val playersWinrate = viewModel.getPlayersWinrate(PlayersWinrate)
             val playersTotalMP = viewModel.getPlayersTotal(PlayersWinrate)
             onPlayerDataReady(playersWinrate, playersTotalMP)
@@ -229,8 +275,9 @@ class PlayerStatsFragment : Fragment() {
         viewModel.recentMatches.collect { recentMatches ->
             matchesAdapter = MatchesAdapter(heroes, recentMatches)
             matchesRecyclerView.adapter = matchesAdapter
-            matchesAdapter.onItemClick = {item ->
-                val action = PlayerStatsFragmentDirections.actionPlayerStatsFragmentToMatchStatsFragment( item.toString() )
+            matchesAdapter.onItemClick = { item ->
+                val action =
+                    PlayerStatsFragmentDirections.actionPlayerStatsFragmentToMatchStatsFragment(item.toString())
                 findNavController().navigate(action)
             }
         }

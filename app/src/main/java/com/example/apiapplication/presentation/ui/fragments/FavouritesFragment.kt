@@ -1,6 +1,7 @@
 package com.example.apiapplication.presentation.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
-import com.example.apiapplication.data.models.PlayersHeroStats
-import com.example.apiapplication.data.models.PlayersProfile
-import com.example.apiapplication.data.models.PlayersWinrate
 import com.example.apiapplication.databinding.FragmentFavouritesBinding
 import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.ui.adapters.FavouritesPlayersAdapter
 import com.example.apiapplication.presentation.viewmodel.FavouritesViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class FavouritesFragment : Fragment() {
@@ -31,9 +31,7 @@ class FavouritesFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavouritesBinding.inflate(layoutInflater, container, false)
         bottomNavigation?.visibility = View.VISIBLE
@@ -45,7 +43,7 @@ class FavouritesFragment : Fragment() {
 
         favouritesPlayersRecyclerView = view.findViewById(R.id.favourites_players_recycler_view)
         favouritesPlayersAdapter =
-            FavouritesPlayersAdapter(emptyList(), emptyList(), emptyList(), emptyList())
+            FavouritesPlayersAdapter(emptyList(), mutableListOf(), mutableListOf(), mutableListOf())
         favouritesPlayersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = favouritesPlayersAdapter
@@ -61,28 +59,33 @@ class FavouritesFragment : Fragment() {
     }
 
     private suspend fun collectFavouritesPlayers() {
-        viewModel.favouritesPlayers.collect { players ->
-            val newProfile: MutableList<PlayersProfile> = emptyList<PlayersProfile>().toMutableList()
-            val newHeroStats: MutableList<List<PlayersHeroStats>> = emptyList<List<PlayersHeroStats>>().toMutableList()
-            val newWinrate: MutableList<PlayersWinrate> = emptyList<PlayersWinrate>().toMutableList()
-            for (item in players) {
-                viewModel.fetchPlayerStats(item.toString())
-                val profile: PlayersProfile = viewModel.playersProfile.value!!
-                val heroStats: List<PlayersHeroStats> = viewModel.playersHeroStats.value
-                val winrate: PlayersWinrate = viewModel.playersWinrate.value!!
-//                if (viewModel.playersProfile.value != null)
-                    newProfile += profile
-                    newHeroStats += heroStats
-                    newWinrate += winrate
+        try {
+            val heroes = viewModel.heroes.first { it.isNotEmpty() }
+            viewModel.favouritesPlayers.collect { players ->
+                if (players.isNotEmpty()) {
+                    for (item in players) {
+                        viewModel.fetchPlayerStats(item.steam_id)
+                        favouritesPlayersAdapter.updateData(heroes)
+                        delay(2500)
+                        val profile = viewModel.playersProfile.first { it != null }
+                        val heroStats = viewModel.playersHeroStats.first { it.isNotEmpty() }
+                        val winrate = viewModel.playersWinrate.first { it != null }
+
+                        if (profile != null && winrate != null) {
+                            favouritesPlayersAdapter.addData(
+                                profile, heroStats, winrate
+                            )
+                        }
+                    }
+                }
             }
-            favouritesPlayersAdapter.updateData(
-                newProfile, newHeroStats, newWinrate
-            )
+        } catch (e: Exception) {
+            Log.e("zxc", e.toString())
         }
+    }
 
 
 //  TODO      viewModel.favouritesMatches.first() { it.isNotEmpty() }
 
 
-    }
 }

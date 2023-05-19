@@ -1,9 +1,9 @@
 package com.example.apiapplication.networking
 
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import com.example.apiapplication.data.api.RaspberryAPI
 import com.example.apiapplication.data.models.DotaUserRaspberry
+import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.data.models.MatchStats
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +30,15 @@ class RaspberryPiProvider {
 
     private val _steamComments = MutableStateFlow<List<DotaUserRaspberry.Comment>>(emptyList())
     val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> = _steamComments
+
+    private val _firebaseProfile = MutableStateFlow<FirebaseUserRaspberry?>(null)
+    val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = _firebaseProfile
+
+    private val _favouritesPlayers = MutableStateFlow<List<FirebaseUserRaspberry.FavouritePlayers>>(emptyList())
+    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> = _favouritesPlayers
+
+    private val _favouritesMatches = MutableStateFlow<List<FirebaseUserRaspberry.FavouriteMatches>>(emptyList())
+    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> = _favouritesMatches
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://176.99.158.188:50993/")
@@ -93,6 +102,50 @@ class RaspberryPiProvider {
                     if (response.isSuccessful) {
                         _steamIDProfile.value = newProfile
                         _steamComments.value = listOf(newComment)
+                        Log.d("zxc", "new comment posted to a new profile $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
+    }
+    fun postFavouritePlayer (
+        userMail: String,
+        nickname: String,
+        playerId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        if (api != null) {
+            coroutineScope.launch(Dispatchers.IO) {
+                val newFavourite = FirebaseUserRaspberry.FavouritePlayers(playerId)
+
+                if (firebaseProfile.value?._firebase_id != null) {
+                    val currentProfile = firebaseProfile.value
+
+                    val updatedData = currentProfile?.players?.toMutableList()?.apply { add(newFavourite) } ?: listOf(newFavourite)
+
+                    val updatedProfile = currentProfile?.copy(players = updatedData)
+
+                    val response = api.postFirebaseProfile(updatedProfile!!)
+
+                    if (response.isSuccessful) {
+                        _firebaseProfile.value = updatedProfile
+                        _favouritesPlayers.value = updatedData
+                        Log.d("zxc", "new comment posted to the current profile $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    val newProfile = FirebaseUserRaspberry(userMail, nickname, listOf(newFavourite), emptyList())
+
+                    val response = api.postFirebaseProfile(newProfile)
+
+                    if (response.isSuccessful) {
+                        _firebaseProfile.value = newProfile
+                        _favouritesPlayers.value = listOf(newFavourite)
                         Log.d("zxc", "new comment posted to a new profile $response")
                         callback(true)
                     } else {

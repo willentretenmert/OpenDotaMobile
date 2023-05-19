@@ -2,6 +2,7 @@ package com.example.apiapplication.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.apiapplication.data.models.DotaUserRaspberry
+import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
 import com.example.apiapplication.data.models.PlayersHeroStats
@@ -21,13 +22,19 @@ class PlayerStatsViewModel : ViewModel() {
     val heroes: StateFlow<List<Hero>> = apiProvider.heroes
     val playersHeroStats: StateFlow<List<PlayersHeroStats>> = apiProvider.playersHeroStats
     val playersProfile: StateFlow<PlayersProfile?> = apiProvider.playersProfile
-    val playersWinRate: StateFlow<PlayersWinrate?> = apiProvider.playersWinrate
+    val playersWinrate: StateFlow<PlayersWinrate?> = apiProvider.playersWinrate
     val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
-    val matchStats: StateFlow<MatchStats?> = raspberryPiProvider.matchStats
-    val players: StateFlow<List<MatchStats.Player>> = raspberryPiProvider.players
+    val matchStats: StateFlow<MatchStats?> = apiProvider.matchStats
+    val players: StateFlow<List<MatchStats.Player>> = apiProvider.players
     val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
     val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
         raspberryPiProvider.steamComments
+    val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = raspberryPiProvider.firebaseProfile
+    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> =
+        raspberryPiProvider.favouritesPlayers
+    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> =
+        raspberryPiProvider.favouritesMatches
+
 
     fun fetchSteamIDProfile(id: CharSequence) {
         raspberryPiProvider.fetchSteamIDProfile(id)
@@ -47,6 +54,15 @@ class PlayerStatsViewModel : ViewModel() {
         callback: (Boolean) -> Unit
     ) {
         raspberryPiProvider.postFavouritePlayer(userMail, nickname, playerId, callback)
+    }
+
+    fun deleteFavouritePlayer(
+        userMail: String,
+        nickname: String,
+        playerId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        raspberryPiProvider.deleteFavouritePlayer(userMail, nickname, playerId, callback)
     }
 
     // gets a json string of dota heroes
@@ -71,7 +87,7 @@ class PlayerStatsViewModel : ViewModel() {
         data2: List<PlayersHeroStats>,
         i: Int
     ): String {
-        val name = data.firstOrNull { v -> v.id == data2[i].hero_id }?.name ?: ""
+        val name = data.firstOrNull { it.id == data2[i].hero_id }?.name ?: ""
         return "ic_${name}"
     }
 
@@ -110,4 +126,5 @@ class PlayerStatsViewModel : ViewModel() {
     fun getPlayersRank(data: PlayersProfile?): String {
         return "ic_rank${data?.rank_tier}"
     }
+
 }

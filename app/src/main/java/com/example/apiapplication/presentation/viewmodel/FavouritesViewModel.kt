@@ -43,8 +43,8 @@ class FavouritesViewModel : ViewModel() {
     private val _playersWinrate = MutableStateFlow<PlayersWinrate?>(null)
     val playersWinrate: StateFlow<PlayersWinrate?> = _playersWinrate
     val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
-    val matchStats: StateFlow<MatchStats?> = raspberryPiProvider.matchStats
-    val players: StateFlow<List<MatchStats.Player>> = raspberryPiProvider.players
+    val matchStats: StateFlow<MatchStats?> = apiProvider.matchStats
+    val players: StateFlow<List<MatchStats.Player>> = apiProvider.players
     val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
     val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
         raspberryPiProvider.steamComments

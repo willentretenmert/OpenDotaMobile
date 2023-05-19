@@ -15,9 +15,9 @@ import com.example.apiapplication.databinding.ItemPlayerstatsBinding
 
 class FavouritesPlayersAdapter(
     private var dataHero: List<Hero>,
-    private var dataSetProfile: List<PlayersProfile>, // TODO
-    private var dataSetHeroStats: List<List<PlayersHeroStats>>, // TODO
-    private var dataSetWinrate: List<PlayersWinrate> // TODO
+    private var dataSetProfile: List<PlayersProfile>,
+    private var dataSetHeroStats: List<List<PlayersHeroStats>>,
+    private var dataSetWinrate: List<PlayersWinrate>
 ) : RecyclerView.Adapter<FavouritesPlayersAdapter.FavouritesPlayersViewHolder>() {
     inner class FavouritesPlayersViewHolder(val binding: ItemPlayerstatsBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -43,7 +43,8 @@ class FavouritesPlayersAdapter(
                 .load(currentProfile.profile?.avatarmedium)
                 .into(holder.playerAvatar)
 
-            profileBriefing.briefingWinrate.text = getPlayersWinrate(currentWinrate).toString() + "%"
+            profileBriefing.briefingWinrate.text =
+                getPlayersWinrate(currentWinrate).toString() + "%"
             profileBriefing.briefingTotalMatches.text = getPlayersTotal(currentWinrate)
 
             for (i in 0..2) {
@@ -53,19 +54,22 @@ class FavouritesPlayersAdapter(
                     0 -> {
                         hero1.heroIcon.setImageResource(heroResId)
                         hero1.heroGames.text = currentHeroStats[i].games.toString()
-                        hero1.heroWinrate.text = (currentHeroStats[i].win / currentHeroStats[i].games).toString()
+                        hero1.heroWinrate.text =
+                            (currentHeroStats[i].win / currentHeroStats[i].games).toString()
                     }
 
                     1 -> {
                         hero2.heroIcon.setImageResource(heroResId)
                         hero2.heroGames.text = currentHeroStats[i].games.toString()
-                        hero2.heroWinrate.text = (currentHeroStats[i].win / currentHeroStats[i].games).toString()
+                        hero2.heroWinrate.text =
+                            (currentHeroStats[i].win / currentHeroStats[i].games).toString()
                     }
 
                     2 -> {
                         hero3.heroIcon.setImageResource(heroResId)
                         hero3.heroGames.text = currentHeroStats[i].games.toString()
-                        hero3.heroWinrate.text = (currentHeroStats[i].win / currentHeroStats[i].games).toString()
+                        hero3.heroWinrate.text =
+                            (currentHeroStats[i].win / currentHeroStats[i].games).toString()
                     }
                 }
             }
@@ -73,6 +77,17 @@ class FavouritesPlayersAdapter(
     }
 
     override fun getItemCount() = dataSetProfile.size
+
+    fun updateData(
+        newProfile: List<PlayersProfile>,
+        newHeroStats: List<List<PlayersHeroStats>>,
+        newWinrate: List<PlayersWinrate>
+    ) {
+        this.dataSetProfile = newProfile
+        this.dataSetHeroStats = newHeroStats
+        this.dataSetWinrate = newWinrate
+        notifyDataSetChanged()
+    }
 
     private fun getHeroNameByPlayerIndex(
         data: List<Hero>,

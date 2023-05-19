@@ -43,10 +43,10 @@ class FavouritesViewModel : ViewModel() {
     val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = _firebaseProfile
 
     private val _favouritesPlayers = MutableStateFlow<List<FirebaseUserRaspberry.FavouritePlayers>>(emptyList())
-    val favouritesPlayers: MutableStateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> = _favouritesPlayers
+    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> = _favouritesPlayers
 
     private val _favouritesMatches = MutableStateFlow<List<FirebaseUserRaspberry.FavouriteMatches>>(emptyList())
-    val favouritesMatches: MutableStateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> = _favouritesMatches
+    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> = _favouritesMatches
 
     // http://176.99.158.188:50993/request?key=dotaProfile&id=275690206
     // http://176.99.158.188:50993/request?key=firebaseProfile&id=12345

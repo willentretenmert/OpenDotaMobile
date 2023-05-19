@@ -18,6 +18,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.SocketTimeoutException
@@ -61,45 +62,115 @@ class OpenDotaApiProvider {
     // gets a json string of dota heroes
     fun fetchHeroes() {
         coroutineScope.launch(Dispatchers.IO) {
-            val heroesDeferred = async { api.getHeroes() }
+            try {
+                val heroesDeferred = async {
+                    try {
+                        api.getHeroes()
+                    } catch (e: Exception) {
+                        Log.e("zxc", "Error fetching heroes: ${e.message}")
+                        return@async null
+                    }
+                }
+                val heroes = heroesDeferred.await()
 
-            val heroes = heroesDeferred.await()
-
-            _heroes.value = heroes.toList()
+                if (heroes != null) {
+                    _heroes.value = heroes.toList()
+                }
+            } catch (e: Exception) {
+                Log.e("zxc", "Error fetching match stats: ${e.message}")
+            }
         }
     }
 
-    // gets a json string of player's matches recent
     fun fetchRecentMatches(id: CharSequence) {
         coroutineScope.launch(Dispatchers.IO) {
-            val recentMatchesDeferred = async { api.getRecentMatches(id) }
+            try {
+                val recentMatchesDeferred = async {
+                    try {
+                        api.getRecentMatches(id)
+                    } catch (e: Exception) {
+                        Log.e("zxc", "Error fetching recent matches: ${e.message}")
+                        return@async null
+                    }
+                }
+                val recentMatches = recentMatchesDeferred.await()
 
-            val recentMatches = recentMatchesDeferred.await()
-
-            _recentMatches.value = recentMatches.toList()
+                if (recentMatches != null) {
+                    _recentMatches.value = recentMatches.toList()
+                }
+            } catch (e: Exception) {
+                Log.e("zxc", "Error fetching match stats: ${e.message}")
+            }
         }
     }
 
-    // gets a json string and makes it a PlayersHeroStats object
     fun fetchPlayerStats(id: CharSequence) {
         coroutineScope.launch(Dispatchers.IO) {
-            val playerHeroStatsDeferred = async { api.getPlayerHeroStats(id) }
-            val playerProfileDeferred = async { api.getPlayerProfile(id) }
-            val playerWinrateDeferred = async { api.getPlayerWinrate(id) }
+            try {
+                val playerHeroStatsDeferred = async {
+                    try {
+                        api.getPlayerHeroStats(id)
+                    } catch (e: Exception) {
+                        Log.e("zxc", "Error fetching player hero stats: ${e.message}")
+                        return@async null
+                    }
+                }
+                val playerProfileDeferred = async {
+                    try {
+                        api.getPlayerProfile(id)
+                    } catch (e: Exception) {
+                        Log.e("zxc", "Error fetching player profile: ${e.message}")
+                        return@async null
+                    }
+                }
+                val playerWinrateDeferred = async {
+                    try {
+                        api.getPlayerWinrate(id)
+                    } catch (e: Exception) {
+                        Log.e("zxc", "Error fetching player winrate: ${e.message}")
+                        return@async null
+                    }
+                }
 
-            _playersHeroStats.value = playerHeroStatsDeferred.await().toList()
-            _playersProfile.value = playerProfileDeferred.await()
-            _playersWinrate.value = playerWinrateDeferred.await()
+                val playerHeroStats = playerHeroStatsDeferred.await()
+                val playerProfile = playerProfileDeferred.await()
+                val playerWinrate = playerWinrateDeferred.await()
+
+                if (playerHeroStats != null) {
+                    _playersHeroStats.value = playerHeroStats.toList()
+                }
+                if (playerProfile != null) {
+                    _playersProfile.value = playerProfile
+                }
+                if (playerWinrate != null) {
+                    _playersWinrate.value = playerWinrate
+                }
+            } catch (e: Exception) {
+                Log.e("zxc", "Error fetching match stats: ${e.message}")
+            }
         }
     }
 
     fun fetchMatchStats(id: CharSequence) {
         coroutineScope.launch(Dispatchers.IO) {
-            val matchStatsDeferred = async { api.getMatch(id) }
-            val matchStats = matchStatsDeferred.await()
+            try {
+                val matchStatsDeferred = async {
+                    try {
+                        api.getMatch(id)
+                    } catch (e: Exception) {
+                        Log.d("zxc", "error 404")
+                        return@async null
+                    }
+                }
+                val matchStats = matchStatsDeferred.await()
 
-            _matchStats.value = matchStats
-            _players.value = matchStats.players
+                if (matchStats != null) {
+                    _matchStats.value = matchStats
+                    _players.value = matchStats.players
+                }
+            } catch (e: Exception) {
+                Log.e("zxc", "Error fetching match stats: ${e.message}")
+            }
         }
     }
 }

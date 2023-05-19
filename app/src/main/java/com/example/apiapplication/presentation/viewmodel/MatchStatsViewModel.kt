@@ -37,7 +37,6 @@ class MatchStatsViewModel : ViewModel() {
     fun getMatchStartDate(data: MatchStats?): String {
         val date = Date((data?.start_time ?: 0) * 1000L)
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        Log.d("zxc", dateFormat.format(date))
         return dateFormat.format(date)
     }
 

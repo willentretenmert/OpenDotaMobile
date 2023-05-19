@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apiapplication.data.api.OpenDotaAPI
-import com.example.apiapplication.data.api.RaspberryAPI
 import com.example.apiapplication.data.models.DotaUserRaspberry
 import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.data.models.Hero
@@ -17,7 +16,11 @@ import com.example.apiapplication.networking.OpenDotaApiProvider
 import com.example.apiapplication.networking.RaspberryPiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,9 +34,14 @@ class FavouritesViewModel : ViewModel() {
     val raspberryPiProvider = RaspberryPiProvider()
 
     val heroes: StateFlow<List<Hero>> = apiProvider.heroes
-    val playersHeroStats: StateFlow<List<PlayersHeroStats>> = apiProvider.playersHeroStats
-    val playersProfile: StateFlow<PlayersProfile?> = apiProvider.playersProfile
-    val playersWinrate: StateFlow<PlayersWinrate?> = apiProvider.playersWinrate
+    private val _playersHeroStats = MutableStateFlow<List<PlayersHeroStats>>(emptyList())
+    val playersHeroStats: StateFlow<List<PlayersHeroStats>> = _playersHeroStats
+
+    private val _playersProfile = MutableStateFlow<PlayersProfile?>(null)
+    val playersProfile: StateFlow<PlayersProfile?> = _playersProfile
+
+    private val _playersWinrate = MutableStateFlow<PlayersWinrate?>(null)
+    val playersWinrate: StateFlow<PlayersWinrate?> = _playersWinrate
     val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
     val matchStats: StateFlow<MatchStats?> = raspberryPiProvider.matchStats
     val players: StateFlow<List<MatchStats.Player>> = raspberryPiProvider.players
@@ -49,6 +57,12 @@ class FavouritesViewModel : ViewModel() {
     // http://176.99.158.188:50993/request?key=dotaProfile&id=275690206
     // http://176.99.158.188:50993/request?key=firebaseProfile&id=12345
 
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://api.opendota.com/api/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api = retrofit.create(OpenDotaAPI::class.java)
 
     // gets a json string of dota heroes
     fun fetchHeroes() {
@@ -61,8 +75,18 @@ class FavouritesViewModel : ViewModel() {
     }
 
     // gets a json string and makes it a PlayersHeroStats object
-    fun fetchPlayerStats(id: CharSequence) {
-        apiProvider.fetchPlayerStats(id)
+    fun fetchPlayerStats(id: CharSequence): Flow<Unit> = flow {
+        coroutineScope {
+            val playerHeroStatsDeferred = async { api.getPlayerHeroStats(id) }
+            val playerProfileDeferred = async { api.getPlayerProfile(id) }
+            val playerWinrateDeferred = async { api.getPlayerWinrate(id) }
+
+            _playersHeroStats.value = playerHeroStatsDeferred.await().toList()
+            _playersProfile.value = playerProfileDeferred.await()
+            _playersWinrate.value = playerWinrateDeferred.await()
+
+            emit(Unit)
+        }
     }
 
 

@@ -16,7 +16,6 @@ import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.ui.adapters.FavouritesPlayersAdapter
 import com.example.apiapplication.presentation.viewmodel.FavouritesViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -64,17 +63,18 @@ class FavouritesFragment : Fragment() {
             viewModel.favouritesPlayers.collect { players ->
                 if (players.isNotEmpty()) {
                     for (item in players) {
-                        viewModel.fetchPlayerStats(item.steam_id)
-                        favouritesPlayersAdapter.updateData(heroes)
-                        delay(2500)
-                        val profile = viewModel.playersProfile.first { it != null }
-                        val heroStats = viewModel.playersHeroStats.first { it.isNotEmpty() }
-                        val winrate = viewModel.playersWinrate.first { it != null }
+                        viewModel.fetchPlayerStats(item.steam_id).collect { // Notice .collect here
+                            favouritesPlayersAdapter.updateData(heroes)
 
-                        if (profile != null && winrate != null) {
-                            favouritesPlayersAdapter.addData(
-                                profile, heroStats, winrate
-                            )
+                            val profile = viewModel.playersProfile.first { it != null }
+                            val heroStats = viewModel.playersHeroStats.first { it.isNotEmpty() }
+                            val winrate = viewModel.playersWinrate.first { it != null }
+
+                            if (profile != null && winrate != null) {
+                                favouritesPlayersAdapter.addData(
+                                    profile, heroStats, winrate
+                                )
+                            }
                         }
                     }
                 }

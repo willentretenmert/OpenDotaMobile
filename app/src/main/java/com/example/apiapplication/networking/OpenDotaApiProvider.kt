@@ -87,13 +87,9 @@ class OpenDotaApiProvider {
             val playerProfileDeferred = async { api.getPlayerProfile(id) }
             val playerWinrateDeferred = async { api.getPlayerWinrate(id) }
 
-            val playerHeroStats = playerHeroStatsDeferred.await()
-            val playerProfile = playerProfileDeferred.await()
-            val playerWinrate = playerWinrateDeferred.await()
-
-            _playersHeroStats.value = playerHeroStats.toList()
-            _playersProfile.value = playerProfile
-            _playersWinrate.value = playerWinrate
+            _playersHeroStats.value = playerHeroStatsDeferred.await().toList()
+            _playersProfile.value = playerProfileDeferred.await()
+            _playersWinrate.value = playerWinrateDeferred.await()
         }
     }
 

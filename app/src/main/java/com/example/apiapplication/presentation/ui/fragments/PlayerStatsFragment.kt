@@ -198,6 +198,7 @@ class PlayerStatsFragment : Fragment() {
     // 132697251 - shustr
     // 121473493 - max
     // 303880693 - vlad
+    // 202417398 - ermak
     // 7145036443
 
     private suspend fun collectPlayerProfile(onPlayerDataReady: (String, String) -> Unit) {

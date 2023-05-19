@@ -16,13 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.apiapplication.R
 import com.example.apiapplication.databinding.FragmentPlayerStatsBinding
+import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.ui.adapters.CommentsAdapter
 import com.example.apiapplication.presentation.ui.adapters.MatchesAdapter
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class PlayerStatsFragment : Fragment() {
 
@@ -32,6 +34,8 @@ class PlayerStatsFragment : Fragment() {
     private lateinit var matchesRecyclerView: RecyclerView
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var commentsRecyclerView: RecyclerView
+
+    private val auth = MainActivity.User.auth
     private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,12 +144,31 @@ class PlayerStatsFragment : Fragment() {
 
         // sending a new comment
         binding.sendBtn.setOnClickListener {
-            viewModel.postComment(id, "QWERTY", binding.editTextNewComment.text.toString()) { success ->
+            viewModel.postComment(
+                id,
+                "QWERTY",
+                binding.editTextNewComment.text.toString()
+            ) { success ->
                 if (success) {
                     binding.editTextNewComment.text.clear()
                 }
                 viewLifecycleOwner.lifecycleScope.launch {
                     collectComments()
+                }
+            }
+        }
+
+        binding.playerstats.addPlayerToFavsBtn.setOnClickListener {
+            viewModel.postFavouritePlayer(
+                auth.currentUser?.email.toString(),
+                "QWERTY",
+                id
+            ) { success ->
+                if (success) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        binding.playerstats.addPlayerToFavsBtn.setBackgroundResource(R.drawable.button_delete)
+                        binding.playerstats.addPlayerToFavsBtn.setImageResource(R.drawable.ic_delete)
+                    }
                 }
             }
         }

@@ -16,24 +16,34 @@ import kotlinx.coroutines.flow.StateFlow
 class PlayerStatsViewModel : ViewModel() {
 
     val apiProvider = OpenDotaApiProvider()
-    val raspberryProvide = RaspberryPiProvider()
+    val raspberryPiProvider = RaspberryPiProvider()
 
     val heroes: StateFlow<List<Hero>> = apiProvider.heroes
     val playersHeroStats: StateFlow<List<PlayersHeroStats>> = apiProvider.playersHeroStats
     val playersProfile: StateFlow<PlayersProfile?> = apiProvider.playersProfile
     val playersWinRate: StateFlow<PlayersWinrate?> = apiProvider.playersWinrate
     val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
-    val matchStats: StateFlow<MatchStats?> = raspberryProvide.matchStats
-    val players: StateFlow<List<MatchStats.Player>> = raspberryProvide.players
-    val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryProvide.steamIDProfile
-    val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> = raspberryProvide.steamComments
+    val matchStats: StateFlow<MatchStats?> = raspberryPiProvider.matchStats
+    val players: StateFlow<List<MatchStats.Player>> = raspberryPiProvider.players
+    val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
+    val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
+        raspberryPiProvider.steamComments
 
     fun fetchSteamIDProfile(id: CharSequence) {
-        raspberryProvide.fetchSteamIDProfile(id)
+        raspberryPiProvider.fetchSteamIDProfile(id)
     }
 
     fun postComment(id: String, author: String, content: String, callback: (Boolean) -> Unit) {
-        raspberryProvide.postComment(id, author, content, callback)
+        raspberryPiProvider.postComment(id, author, content, callback)
+    }
+
+    fun postFavouritePlayer(
+        userMail: String,
+        nickname: String,
+        playerId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        raspberryPiProvider.postFavouritePlayer(userMail, nickname, playerId, callback)
     }
 
     // gets a json string of dota heroes

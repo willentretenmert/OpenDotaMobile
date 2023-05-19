@@ -15,9 +15,9 @@ import com.example.apiapplication.databinding.ItemPlayerstatsBinding
 
 class FavouritesPlayersAdapter(
     private var dataHero: List<Hero>,
-    private var dataSetProfile: List<PlayersProfile>,
-    private var dataSetHeroStats: List<List<PlayersHeroStats>>,
-    private var dataSetWinrate: List<PlayersWinrate>
+    private var dataSetProfile: MutableList<PlayersProfile>,
+    private var dataSetHeroStats: MutableList<List<PlayersHeroStats>>,
+    private var dataSetWinrate: MutableList<PlayersWinrate>
 ) : RecyclerView.Adapter<FavouritesPlayersAdapter.FavouritesPlayersViewHolder>() {
     inner class FavouritesPlayersViewHolder(val binding: ItemPlayerstatsBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -55,21 +55,21 @@ class FavouritesPlayersAdapter(
                         hero1.heroIcon.setImageResource(heroResId)
                         hero1.heroGames.text = currentHeroStats[i].games.toString()
                         hero1.heroWinrate.text =
-                            (currentHeroStats[i].win / currentHeroStats[i].games).toString()
+                            getHeroWinrate(currentHeroStats[i])
                     }
 
                     1 -> {
                         hero2.heroIcon.setImageResource(heroResId)
                         hero2.heroGames.text = currentHeroStats[i].games.toString()
                         hero2.heroWinrate.text =
-                            (currentHeroStats[i].win / currentHeroStats[i].games).toString()
+                            getHeroWinrate(currentHeroStats[i])
                     }
 
                     2 -> {
                         hero3.heroIcon.setImageResource(heroResId)
                         hero3.heroGames.text = currentHeroStats[i].games.toString()
                         hero3.heroWinrate.text =
-                            (currentHeroStats[i].win / currentHeroStats[i].games).toString()
+                            getHeroWinrate(currentHeroStats[i])
                     }
                 }
             }
@@ -79,14 +79,27 @@ class FavouritesPlayersAdapter(
     override fun getItemCount() = dataSetProfile.size
 
     fun updateData(
-        newProfile: List<PlayersProfile>,
-        newHeroStats: List<List<PlayersHeroStats>>,
-        newWinrate: List<PlayersWinrate>
+        newHero: List<Hero>,
+//        newProfile: MutableList<PlayersProfile>,
+//        newHeroStats: MutableList<List<PlayersHeroStats>>,
+//        newWinrate: MutableList<PlayersWinrate>
     ) {
-        this.dataSetProfile = newProfile
-        this.dataSetHeroStats = newHeroStats
-        this.dataSetWinrate = newWinrate
+        this.dataHero = newHero
+//        this.dataSetProfile = newProfile
+//        this.dataSetHeroStats = newHeroStats
+//        this.dataSetWinrate = newWinrate
         notifyDataSetChanged()
+    }
+
+    fun addData(
+        newProfile: PlayersProfile,
+        newHeroStats: List<PlayersHeroStats>,
+        newWinrate: PlayersWinrate
+    ) {
+        this.dataSetProfile.add(newProfile)
+        this.dataSetHeroStats.add(newHeroStats)
+        this.dataSetWinrate.add(newWinrate)
+        notifyItemInserted(dataSetProfile.size - 1)
     }
 
     private fun getHeroNameByPlayerIndex(
@@ -107,6 +120,13 @@ class FavouritesPlayersAdapter(
     private fun getPlayersTotal(data: PlayersWinrate?): String {
         return ((data?.win ?: 0) + (data?.lose ?: 0)).toString()
     }
+
+    private fun getHeroWinrate(data: PlayersHeroStats?): String {
+        val wins: Int = data?.win ?: 0
+        val total: Int = data?.games ?: 0
+        return if (total != 0) (wins.toDouble() / total * 100).toInt().toString() + "%" else "0%"
+    }
+
 
     private fun getResourceId(context: Context, resName: String): Int {
         return context.resources.getIdentifier(resName, "mipmap", context.packageName)

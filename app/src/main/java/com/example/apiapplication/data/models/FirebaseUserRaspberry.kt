@@ -13,9 +13,9 @@ data class FirebaseUserRaspberry(
 
 ) {
     data class FavouritePlayers(
-        @field:SerializedName("steam_id") val steam_id: Int
+        @field:SerializedName("steam_id") val steam_id: String
     )
     data class FavouriteMatches(
-        @field:SerializedName("match_id") val match_id: Int
+        @field:SerializedName("match_id") val match_id: String
     )
 }

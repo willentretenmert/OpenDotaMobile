@@ -20,7 +20,9 @@ class MatchesAdapter(
 ) :
     RecyclerView.Adapter<MatchesAdapter.MatchesViewHolder>() {
 
-    class MatchesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var onItemClick: ((Long) -> Unit)? = null
+
+    inner class MatchesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val heroIcon: ImageView = itemView.findViewById(R.id.match_hero_icon)
         val outcome: TextView = itemView.findViewById(R.id.match_outcome)
@@ -29,7 +31,9 @@ class MatchesAdapter(
         val duration: TextView = itemView.findViewById(R.id.match_duration)
 
         init {
-            itemView.setOnClickListener { }
+            itemView.setOnClickListener() {
+                onItemClick?.invoke(dataSet[adapterPosition].match_id)
+            }
         }
     }
 

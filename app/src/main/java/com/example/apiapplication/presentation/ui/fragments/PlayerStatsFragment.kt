@@ -229,6 +229,10 @@ class PlayerStatsFragment : Fragment() {
         viewModel.recentMatches.collect { recentMatches ->
             matchesAdapter = MatchesAdapter(heroes, recentMatches)
             matchesRecyclerView.adapter = matchesAdapter
+            matchesAdapter.onItemClick = {item ->
+                val action = PlayerStatsFragmentDirections.actionPlayerStatsFragmentToMatchStatsFragment( item.toString() )
+                findNavController().navigate(action)
+            }
         }
     }
 

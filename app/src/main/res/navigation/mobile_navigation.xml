@@ -69,6 +69,9 @@
         <argument
             android:name="playerId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_playerStatsFragment_to_matchStatsFragment"
+            app:destination="@id/matchStatsFragment" />
     </fragment>
 
     <fragment

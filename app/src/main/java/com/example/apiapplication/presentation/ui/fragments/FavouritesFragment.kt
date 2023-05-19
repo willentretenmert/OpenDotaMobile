@@ -50,8 +50,8 @@ class FavouritesFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.fetchFirebaseProfile(auth.currentUser!!.email.toString())
             viewModel.fetchHeroes()
+            viewModel.fetchFirebaseProfile(auth.currentUser!!.email.toString())
         }
         viewLifecycleOwner.lifecycleScope.launch() {
             collectFavouritesPlayers()

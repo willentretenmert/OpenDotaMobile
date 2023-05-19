@@ -77,6 +77,7 @@ class PlayerStatsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchHeroes()
             viewModel.fetchSteamIDProfile(id)
+            viewModel.fetchFirebaseProfile(auth.currentUser?.email.toString())
             viewModel.fetchPlayerStats(id)
             viewModel.fetchRecentMatches(id)
         }

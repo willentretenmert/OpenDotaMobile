@@ -5,15 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apiapplication.data.api.OpenDotaAPI
 import com.example.apiapplication.data.api.RaspberryAPI
+import com.example.apiapplication.data.models.DotaUserRaspberry
 import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
 import com.example.apiapplication.data.models.PlayersHeroStats
 import com.example.apiapplication.data.models.PlayersProfile
 import com.example.apiapplication.data.models.PlayersWinrate
+import com.example.apiapplication.data.models.RecentMatches
+import com.example.apiapplication.networking.OpenDotaApiProvider
+import com.example.apiapplication.networking.RaspberryPiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -24,91 +27,51 @@ import java.util.Locale
 
 class FavouritesViewModel : ViewModel() {
 
-    private val _heroes = MutableStateFlow<List<Hero>>(emptyList())
-    val heroes: StateFlow<List<Hero>> = _heroes
+    val apiProvider = OpenDotaApiProvider()
+    val raspberryPiProvider = RaspberryPiProvider()
 
-    private val _playersHeroStats = MutableStateFlow<List<PlayersHeroStats>>(emptyList())
-    val playersHeroStats: StateFlow<List<PlayersHeroStats>> = _playersHeroStats
-
-    private val _playersProfile = MutableStateFlow<PlayersProfile?>(null)
-    val playersProfile: StateFlow<PlayersProfile?> = _playersProfile
-
-    private val _playersWinrate = MutableStateFlow<PlayersWinrate?>(null)
-    val playersWinrate: StateFlow<PlayersWinrate?> = _playersWinrate
-
-    private val _matchStats = MutableStateFlow<MatchStats?>(null)
-    val matchStats: StateFlow<MatchStats?> = _matchStats
-
-    private val _firebaseProfile = MutableStateFlow<FirebaseUserRaspberry?>(null)
-    val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = _firebaseProfile
-
-    private val _favouritesPlayers = MutableStateFlow<List<FirebaseUserRaspberry.FavouritePlayers>>(emptyList())
-    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> = _favouritesPlayers
-
-    private val _favouritesMatches = MutableStateFlow<List<FirebaseUserRaspberry.FavouriteMatches>>(emptyList())
-    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> = _favouritesMatches
+    val heroes: StateFlow<List<Hero>> = apiProvider.heroes
+    val playersHeroStats: StateFlow<List<PlayersHeroStats>> = apiProvider.playersHeroStats
+    val playersProfile: StateFlow<PlayersProfile?> = apiProvider.playersProfile
+    val playersWinrate: StateFlow<PlayersWinrate?> = apiProvider.playersWinrate
+    val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
+    val matchStats: StateFlow<MatchStats?> = raspberryPiProvider.matchStats
+    val players: StateFlow<List<MatchStats.Player>> = raspberryPiProvider.players
+    val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
+    val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
+        raspberryPiProvider.steamComments
+    val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = raspberryPiProvider.firebaseProfile
+    val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> =
+        raspberryPiProvider.favouritesPlayers
+    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> =
+        raspberryPiProvider.favouritesMatches
 
     // http://176.99.158.188:50993/request?key=dotaProfile&id=275690206
     // http://176.99.158.188:50993/request?key=firebaseProfile&id=12345
 
 
-    private val retrofitRaspberryAPI = Retrofit.Builder()
-        .baseUrl("http://176.99.158.188:50993/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val retrofitOpenDotaAPI = Retrofit.Builder()
-        .baseUrl("https://api.opendota.com/api/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val apiRaspberryAPI = retrofitRaspberryAPI.create(RaspberryAPI::class.java)
-
-    private val apiOpenDotaAPI = retrofitOpenDotaAPI.create(OpenDotaAPI::class.java)
-
+    // gets a json string of dota heroes
     fun fetchHeroes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val heroesDeferred = async { apiOpenDotaAPI.getHeroes() }
-            val heroes = heroesDeferred.await()
-
-            _heroes.value = heroes.toList()
-        }
+        apiProvider.fetchHeroes()
     }
 
+    // gets a json string of player's matches recent
+    fun fetchRecentMatches(id: CharSequence) {
+        apiProvider.fetchRecentMatches(id)
+    }
+
+    // gets a json string and makes it a PlayersHeroStats object
     fun fetchPlayerStats(id: CharSequence) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val playerHeroStatsDeferred = async { apiOpenDotaAPI.getPlayerHeroStats(id) }
-            val playerProfileDeferred = async { apiOpenDotaAPI.getPlayerProfile(id) }
-            val playerWinrateDeferred = async { apiOpenDotaAPI.getPlayerWinrate(id) }
-
-            val playerHeroStats = playerHeroStatsDeferred.await()
-            val playerProfile = playerProfileDeferred.await()
-            val playerWinrate = playerWinrateDeferred.await()
-
-            _playersHeroStats.value = playerHeroStats.toList()
-            _playersProfile.value = playerProfile
-            _playersWinrate.value = playerWinrate
-        }
+        apiProvider.fetchPlayerStats(id)
     }
+
 
     fun fetchMatchStats(id: CharSequence) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val matchStatsDeferred = async { apiOpenDotaAPI.getMatch(id) }
-            val matchStats = matchStatsDeferred.await()
-
-            _matchStats.value = matchStats
-        }
+        apiProvider.fetchMatchStats(id)
     }
 
-    fun fetchFirebaseProfile(id: CharSequence) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val firebaseProfileDeferred = async { apiRaspberryAPI.getFirebaseProfile(key = "firebaseProfile", id = id) }
-            val firebaseProfile = firebaseProfileDeferred.await()
-
-            _firebaseProfile.value = firebaseProfile
-            _favouritesPlayers.value = firebaseProfile.players
-            _favouritesMatches.value = firebaseProfile.matches
-        }
+    fun fetchFirebaseProfile(mail: CharSequence) {
+        raspberryPiProvider.fetchFirebaseProfile(mail)
     }
 
     fun getHeroNameByPlayerStatsIndex(
@@ -175,11 +138,11 @@ class FavouritesViewModel : ViewModel() {
         return data?.radiant_win
     }
 
-    fun getFirebaseFavouritesPlayers(data: FirebaseUserRaspberry?) : List<FirebaseUserRaspberry.FavouritePlayers>? {
+    fun getFirebaseFavouritesPlayers(data: FirebaseUserRaspberry?): List<FirebaseUserRaspberry.FavouritePlayers>? {
         return data?.players
     }
 
-    fun getFirebaseFavouritesMatches(data: FirebaseUserRaspberry?) : List<FirebaseUserRaspberry.FavouriteMatches>? {
+    fun getFirebaseFavouritesMatches(data: FirebaseUserRaspberry?): List<FirebaseUserRaspberry.FavouriteMatches>? {
         return data?.matches
     }
 }

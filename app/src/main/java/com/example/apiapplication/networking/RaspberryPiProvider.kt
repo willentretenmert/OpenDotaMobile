@@ -72,6 +72,18 @@ class RaspberryPiProvider {
         }
     }
 
+    fun fetchFirebaseProfile(mail: CharSequence) {
+        if (api != null) coroutineScope.launch(Dispatchers.IO) {
+            val firebaseProfileDeferred = async { api.getFirebaseProfile("firebaseProfile", mail) }
+
+            val firebaseProfile = firebaseProfileDeferred.await()
+
+            _firebaseProfile.value = firebaseProfile //null if error
+            _favouritesPlayers.value = firebaseProfile.players //null if error
+            _favouritesMatches.value = firebaseProfile.matches //null if error
+        }
+    }
+
     fun postComment(id: String, author: String, content: String, callback: (Boolean) -> Unit) {
         if (api != null) {
             coroutineScope.launch(Dispatchers.IO) {

@@ -32,6 +32,9 @@ class PlayerStatsViewModel : ViewModel() {
     fun fetchSteamIDProfile(id: CharSequence) {
         raspberryPiProvider.fetchSteamIDProfile(id)
     }
+    fun fetchFirebaseProfile(mail: CharSequence) {
+        raspberryPiProvider.fetchFirebaseProfile(mail)
+    }
 
     fun postComment(id: String, author: String, content: String, callback: (Boolean) -> Unit) {
         raspberryPiProvider.postComment(id, author, content, callback)

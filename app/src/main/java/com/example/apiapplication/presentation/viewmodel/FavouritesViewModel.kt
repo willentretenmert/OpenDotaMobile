@@ -2,7 +2,6 @@ package com.example.apiapplication.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.apiapplication.data.api.OpenDotaAPI
 import com.example.apiapplication.data.models.DotaUserRaspberry
 import com.example.apiapplication.data.models.FirebaseUserRaspberry
@@ -14,14 +13,12 @@ import com.example.apiapplication.data.models.PlayersWinrate
 import com.example.apiapplication.data.models.RecentMatches
 import com.example.apiapplication.networking.OpenDotaApiProvider
 import com.example.apiapplication.networking.RaspberryPiProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
@@ -43,8 +40,12 @@ class FavouritesViewModel : ViewModel() {
     private val _playersWinrate = MutableStateFlow<PlayersWinrate?>(null)
     val playersWinrate: StateFlow<PlayersWinrate?> = _playersWinrate
     val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
-    val matchStats: StateFlow<MatchStats?> = apiProvider.matchStats
-    val players: StateFlow<List<MatchStats.Player>> = apiProvider.players
+    private val _matchStats = MutableStateFlow<MatchStats?>(null)
+    val matchStats: StateFlow<MatchStats?> = _matchStats
+
+    private val _players = MutableStateFlow<List<MatchStats.Player>>(emptyList())
+    val players: StateFlow<List<MatchStats.Player>> = _players
+
     val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
     val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
         raspberryPiProvider.steamComments
@@ -74,6 +75,23 @@ class FavouritesViewModel : ViewModel() {
         apiProvider.fetchRecentMatches(id)
     }
 
+    fun deleteFavouritePlayer(
+        userMail: String,
+        nickname: String,
+        playerId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        raspberryPiProvider.deleteFavouritePlayer(userMail, nickname, playerId, callback)
+    }
+    fun deleteFavouriteMatch(
+        userMail: String,
+        nickname: String,
+        matchId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        raspberryPiProvider.deleteFavouriteMatch(userMail, nickname, matchId, callback)
+    }
+
     // gets a json string and makes it a PlayersHeroStats object
     fun fetchPlayerStats(id: CharSequence): Flow<Unit> = flow {
         coroutineScope {
@@ -90,8 +108,28 @@ class FavouritesViewModel : ViewModel() {
     }
 
 
-    fun fetchMatchStats(id: CharSequence) {
-        apiProvider.fetchMatchStats(id)
+    fun fetchMatchStats(id: CharSequence): Flow<Unit> = flow {
+        coroutineScope {
+            try {
+                val matchStatsDeferred = async {
+                    try {
+                        api.getMatch(id)
+                    } catch (e: Exception) {
+                        Log.d("zxc", "error 404")
+                        return@async null
+                    }
+                }
+                val matchStats = matchStatsDeferred.await()
+
+                if (matchStats != null) {
+                    _matchStats.value = matchStats
+                    _players.value = matchStats.players
+                    emit(Unit)
+                }
+            } catch (e: Exception) {
+                Log.e("zxc", "Error fetching match stats: ${e.message}")
+            }
+        }
     }
 
     fun fetchFirebaseProfile(mail: CharSequence) {

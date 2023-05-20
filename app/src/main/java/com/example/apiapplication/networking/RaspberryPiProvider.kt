@@ -10,6 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.SocketTimeoutException
@@ -180,7 +181,6 @@ class RaspberryPiProvider {
     ) {
         if (api != null) {
             coroutineScope.launch(Dispatchers.IO) {
-
                 val currentProfile = firebaseProfile.value
 
                 val updatedData = currentProfile?.players?.toMutableList()?.apply {
@@ -192,16 +192,107 @@ class RaspberryPiProvider {
 
                     val response = api.postFirebaseProfile(updatedProfile)
 
+                    withContext(Dispatchers.Main) { // switch to main thread
+                        if (response.isSuccessful) {
+                            _firebaseProfile.value = updatedProfile
+                            _favouritesPlayers.value = updatedData
+                            Log.d("zxc", "$playerId player removed from the current profile $response")
+                            callback(true)
+                        } else {
+                            callback(false)
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) { // switch to main thread
+                        callback(false)
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun postFavouriteMatch(
+        userMail: String,
+        nickname: String,
+        matchId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        if (api != null) {
+            coroutineScope.launch(Dispatchers.IO) {
+                val newFavourite = FirebaseUserRaspberry.FavouriteMatches(matchId)
+
+                if (firebaseProfile.value?._firebase_id != null) {
+                    val currentProfile = firebaseProfile.value
+
+                    val updatedData =
+                        currentProfile?.matches?.toMutableList()?.apply { add(newFavourite) }
+                            ?: listOf(newFavourite)
+
+                    val updatedProfile = currentProfile?.copy(matches = updatedData)
+
+                    val response = api.postFirebaseProfile(updatedProfile!!)
+
                     if (response.isSuccessful) {
                         _firebaseProfile.value = updatedProfile
-                        _favouritesPlayers.value = updatedData
-                        Log.d("zxc", "$playerId player removed from the current profile $response")
+                        _favouritesMatches.value = updatedData
+                        Log.d("zxc", "$matchId match added to favs in the current profile $userMail $response")
                         callback(true)
                     } else {
                         callback(false)
                     }
                 } else {
-                    callback(false)
+                    val newProfile =
+                        FirebaseUserRaspberry(userMail, nickname, emptyList(), listOf(newFavourite))
+
+                    val response = api.postFirebaseProfile(newProfile)
+
+                    if (response.isSuccessful) {
+                        _firebaseProfile.value = newProfile
+                        _favouritesMatches.value = listOf(newFavourite)
+                        Log.d("zxc", "$matchId player added to favs in the current profile $userMail 222 $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
+    }
+
+    fun deleteFavouriteMatch(
+        userMail: String,
+        nickname: String,
+        matchId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        if (api != null) {
+            coroutineScope.launch(Dispatchers.IO) {
+                val currentProfile = firebaseProfile.value
+
+                val updatedData = currentProfile?.matches?.toMutableList()?.apply {
+                    removeIf { it.match_id == matchId }
+                }
+
+                if (updatedData != null) {
+                    val updatedProfile = currentProfile.copy(matches = updatedData)
+
+                    val response = api.postFirebaseProfile(updatedProfile)
+
+                    withContext(Dispatchers.Main) { // switch to main thread
+                        if (response.isSuccessful) {
+                            _firebaseProfile.value = updatedProfile
+                            _favouritesMatches.value = updatedData
+                            Log.d("zxc", "$matchId player removed from the current profile $response")
+                            callback(true)
+                        } else {
+                            callback(false)
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) { // switch to main thread
+                        callback(false)
+                    }
                 }
             }
         }

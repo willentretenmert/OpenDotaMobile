@@ -12,6 +12,10 @@ import com.example.apiapplication.data.models.PlayersHeroStats
 import com.example.apiapplication.data.models.PlayersProfile
 import com.example.apiapplication.data.models.PlayersWinrate
 import com.example.apiapplication.databinding.ItemPlayerstatsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FavouritesPlayersAdapter(
     private var dataHero: List<Hero>,
@@ -21,6 +25,8 @@ class FavouritesPlayersAdapter(
 ) : RecyclerView.Adapter<FavouritesPlayersAdapter.FavouritesPlayersViewHolder>() {
 
     var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick2: ((Int) -> Unit)? = null
+
     inner class FavouritesPlayersViewHolder(val binding: ItemPlayerstatsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val playerAvatar: ImageView = itemView.findViewById(R.id.user_profile_picture)
@@ -28,6 +34,17 @@ class FavouritesPlayersAdapter(
         init {
             binding.root.setOnClickListener {
                 onItemClick?.invoke(dataSetProfile[adapterPosition].profile?.account_id!!)
+            }
+            binding.addPlayerToFavsBtn.apply {
+                GlobalScope.launch {
+                    withContext(Dispatchers.Main) {
+                        setBackgroundResource(R.drawable.button_delete)
+                        setImageResource(R.drawable.ic_delete)
+                        setOnClickListener {
+                            onItemClick2?.invoke(dataSetProfile[adapterPosition].profile?.account_id!!)
+                        }
+                    }
+                }
             }
         }
     }
@@ -88,15 +105,26 @@ class FavouritesPlayersAdapter(
 
     fun updateData(
         newHero: List<Hero>,
-//        newProfile: MutableList<PlayersProfile>,
-//        newHeroStats: MutableList<List<PlayersHeroStats>>,
-//        newWinrate: MutableList<PlayersWinrate>
+        newProfile: MutableList<PlayersProfile>,
+        newHeroStats: MutableList<List<PlayersHeroStats>>,
+        newWinrate: MutableList<PlayersWinrate>
     ) {
         this.dataHero = newHero
-//        this.dataSetProfile = newProfile
-//        this.dataSetHeroStats = newHeroStats
-//        this.dataSetWinrate = newWinrate
+        this.dataSetProfile = newProfile
+        this.dataSetHeroStats = newHeroStats
+        this.dataSetWinrate = newWinrate
         notifyDataSetChanged()
+    }
+
+    fun removeData(
+        oldProfile: PlayersProfile,
+        oldHeroStats: List<PlayersHeroStats>,
+        oldWinrate: PlayersWinrate
+    ) {
+        this.dataSetProfile.remove(oldProfile)
+        this.dataSetHeroStats.remove(oldHeroStats)
+        this.dataSetWinrate.remove(oldWinrate)
+        notifyItemRemoved(dataSetProfile.size + 1)
     }
 
     fun addData(

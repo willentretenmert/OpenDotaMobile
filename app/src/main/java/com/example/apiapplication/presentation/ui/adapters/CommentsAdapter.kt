@@ -15,7 +15,7 @@ class CommentsAdapter(
 ) :
     RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
-    class CommentsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CommentsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val username: TextView = itemView.findViewById(R.id.tv_comment_username)
         val comment: TextView = itemView.findViewById(R.id.tv_comment)
     }

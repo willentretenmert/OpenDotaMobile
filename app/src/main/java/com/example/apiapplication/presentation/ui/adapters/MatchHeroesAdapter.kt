@@ -4,17 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
-import com.example.apiapplication.presentation.ui.fragments.MatchStatsFragment
-import com.example.apiapplication.presentation.ui.fragments.MatchStatsFragmentDirections
-import com.example.apiapplication.presentation.ui.fragments.SearchFragmentDirections
 
 class MatchHeroesAdapter(
     private var dataSetHeroes: List<Hero>,
@@ -23,7 +17,7 @@ class MatchHeroesAdapter(
 ) :
     RecyclerView.Adapter<MatchHeroesAdapter.MatchesHeroesViewHolder>() {
 
-    class MatchesHeroesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MatchesHeroesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val heroIcon: ImageView
 
@@ -35,7 +29,8 @@ class MatchHeroesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesHeroesViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_match_briefing_hero_icon, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_match_briefing_hero_icon, parent, false)
         return MatchesHeroesViewHolder(view)
     }
 

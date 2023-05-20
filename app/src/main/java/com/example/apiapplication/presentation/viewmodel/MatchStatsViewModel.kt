@@ -1,19 +1,12 @@
 package com.example.apiapplication.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.data.models.Hero
 import com.example.apiapplication.data.models.MatchStats
-import com.example.apiapplication.data.api.OpenDotaAPI
 import com.example.apiapplication.networking.OpenDotaApiProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.apiapplication.networking.RaspberryPiProvider
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -21,10 +14,40 @@ import java.util.Locale
 class MatchStatsViewModel : ViewModel() {
 
     val apiProvider = OpenDotaApiProvider()
+    val raspberryPiProvider = RaspberryPiProvider()
 
     val heroes: StateFlow<List<Hero>> = apiProvider.heroes
     val matchStats: StateFlow<MatchStats?> = apiProvider.matchStats
     val players: StateFlow<List<MatchStats.Player>> = apiProvider.players
+    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> =
+        raspberryPiProvider.favouritesMatches
+
+    fun postFavouriteMatch(
+        userMail: String,
+        nickname: String,
+        matchId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        raspberryPiProvider.postFavouriteMatch(
+            userMail,
+            nickname,
+            matchId,
+            callback
+        )
+    }
+    fun deleteFavouriteMatch(
+        userMail: String,
+        nickname: String,
+        matchId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        raspberryPiProvider.deleteFavouriteMatch(
+            userMail,
+            nickname,
+            matchId,
+            callback
+        )
+    }
 
     fun fetchHeroes() {
         apiProvider.fetchHeroes()

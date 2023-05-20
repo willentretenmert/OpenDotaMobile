@@ -13,13 +13,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
+import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.databinding.FragmentMatchStatsBinding
+import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.ui.adapters.MatchHeroesAdapter
 import com.example.apiapplication.presentation.ui.adapters.PlayersAdapter
 import com.example.apiapplication.presentation.viewmodel.MatchStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MatchStatsFragment : Fragment() {
 
@@ -30,15 +35,16 @@ class MatchStatsFragment : Fragment() {
     private lateinit var matchHeroesRadiantAdapter: MatchHeroesAdapter
     private lateinit var matchHeroesDireAdapter: MatchHeroesAdapter
 
-    private lateinit var playersRadiantAdapter: PlayersAdapter
-    private lateinit var playersDireAdapter: PlayersAdapter
-
     private lateinit var matchHeroesRadiantRecyclerView: RecyclerView
     private lateinit var matchHeroesDireRecyclerView: RecyclerView
+
+    private lateinit var playersRadiantAdapter: PlayersAdapter
+    private lateinit var playersDireAdapter: PlayersAdapter
 
     private lateinit var playersRadiantRecyclerView: RecyclerView
     private lateinit var playersDireRecyclerView: RecyclerView
 
+    private val auth = MainActivity.User.auth
     private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
 
@@ -66,15 +72,6 @@ class MatchStatsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchHeroes()
             viewModel.fetchMatchStats(id)
-        }
-        val customLayoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
-            override fun canScrollHorizontally(): Boolean {
-                return false
-            }
-
-            override fun canScrollVertically(): Boolean {
-                return false
-            }
         }
 
 
@@ -135,6 +132,88 @@ class MatchStatsFragment : Fragment() {
             collectMatchPlayers()
         }
 
+        var isFavourite: Boolean
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val favouritesMatchesFlow = viewModel.favouritesMatches.stateIn(this)
+            favouritesMatchesFlow.collect { match ->
+                isFavourite = match.contains(FirebaseUserRaspberry.FavouriteMatches(id))
+                if (!isFavourite) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            binding.matchBriefing.addMatchToFavsBtn.setBackgroundResource(
+                                R.drawable.button_like
+                            )
+                            binding.matchBriefing.addMatchToFavsBtn.setImageResource(
+                                R.drawable.ic_like
+                            )
+                        }
+                    }
+                } else {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            binding.matchBriefing.addMatchToFavsBtn.setBackgroundResource(
+                                R.drawable.button_delete
+                            )
+                            binding.matchBriefing.addMatchToFavsBtn.setImageResource(
+                                R.drawable.ic_delete
+                            )
+                        }
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    binding.matchBriefing.addMatchToFavsBtn.setOnClickListener {
+                        if (isFavourite) {
+                            viewModel.deleteFavouriteMatch(
+                                auth.currentUser?.email.toString(),
+                                "QWERTY",
+                                id
+                            ) { success ->
+                                if (success) {
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        withContext(Dispatchers.Main) {
+                                            binding.matchBriefing.addMatchToFavsBtn.setBackgroundResource(
+                                                R.drawable.button_like
+                                            )
+                                            binding.matchBriefing.addMatchToFavsBtn.setImageResource(
+                                                R.drawable.ic_like
+                                            )
+                                            isFavourite = false
+                                        }
+                                    }
+                                } else {
+                                    Log.e("zxc", "Failed to delete favourite player")
+                                }
+                            }
+                        } else {
+                            viewModel.postFavouriteMatch(
+                                auth.currentUser?.email.toString(),
+                                "QWERTY",
+                                id
+                            ) { success ->
+                                if (success) {
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        withContext(Dispatchers.Main) {
+                                            binding.matchBriefing.addMatchToFavsBtn.setBackgroundResource(
+                                                R.drawable.button_delete
+                                            )
+                                            binding.matchBriefing.addMatchToFavsBtn.setImageResource(
+                                                R.drawable.ic_delete
+                                            )
+                                            isFavourite = true
+                                        }
+                                    }
+                                } else {
+                                    Log.e("zxc", "Failed to add favourite player")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     private fun getNonScrollableLayoutManager(orientation: Int = LinearLayoutManager.VERTICAL): LinearLayoutManager {
@@ -175,12 +254,14 @@ class MatchStatsFragment : Fragment() {
             playersRadiantAdapter.updateData(heroes, radiantTeam)
             playersDireAdapter.updateData(heroes, direTeam)
 
-            playersRadiantAdapter.onItemClick = {item ->
-                val action = MatchStatsFragmentDirections.actionMatchStatsFragmentToPlayerStatsFragment( item.toString() )
+            playersRadiantAdapter.onItemClick = { item ->
+                val action =
+                    MatchStatsFragmentDirections.actionMatchStatsFragmentToPlayerStatsFragment(item.toString())
                 findNavController().navigate(action)
             }
-            playersDireAdapter.onItemClick = {item ->
-                val action = MatchStatsFragmentDirections.actionMatchStatsFragmentToPlayerStatsFragment( item.toString() )
+            playersDireAdapter.onItemClick = { item ->
+                val action =
+                    MatchStatsFragmentDirections.actionMatchStatsFragmentToPlayerStatsFragment(item.toString())
                 findNavController().navigate(action)
             }
         }

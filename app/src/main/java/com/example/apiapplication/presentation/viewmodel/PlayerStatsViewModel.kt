@@ -32,8 +32,7 @@ class PlayerStatsViewModel : ViewModel() {
     val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = raspberryPiProvider.firebaseProfile
     val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> =
         raspberryPiProvider.favouritesPlayers
-    val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> =
-        raspberryPiProvider.favouritesMatches
+
 
 
     fun fetchSteamIDProfile(id: CharSequence) {

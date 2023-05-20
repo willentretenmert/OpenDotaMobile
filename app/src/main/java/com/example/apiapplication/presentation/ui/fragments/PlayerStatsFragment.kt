@@ -19,7 +19,7 @@ import com.example.apiapplication.data.models.FirebaseUserRaspberry
 import com.example.apiapplication.databinding.FragmentPlayerStatsBinding
 import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.example.apiapplication.presentation.ui.adapters.CommentsAdapter
-import com.example.apiapplication.presentation.ui.adapters.MatchesAdapter
+import com.example.apiapplication.presentation.ui.adapters.RecentMatchesAdapter
 import com.example.apiapplication.presentation.viewmodel.PlayerStatsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +32,8 @@ class PlayerStatsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayerStatsBinding
     private lateinit var viewModel: PlayerStatsViewModel
-    private lateinit var matchesAdapter: MatchesAdapter
-    private lateinit var matchesRecyclerView: RecyclerView
+    private lateinit var recentMatchesAdapter: RecentMatchesAdapter
+    private lateinit var recentMatchesRecyclerView: RecyclerView
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var commentsRecyclerView: RecyclerView
 
@@ -61,11 +61,11 @@ class PlayerStatsFragment : Fragment() {
         val args: PlayerStatsFragmentArgs by navArgs()
         val id = args.playerId
 
-        matchesRecyclerView = view.findViewById(R.id.matches_recycler_view)
-        matchesAdapter = MatchesAdapter(emptyList(), emptyList())
-        matchesRecyclerView.apply {
+        recentMatchesRecyclerView = view.findViewById(R.id.matches_recycler_view)
+        recentMatchesAdapter = RecentMatchesAdapter(emptyList(), emptyList())
+        recentMatchesRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = matchesAdapter
+            adapter = recentMatchesAdapter
         }
 
         commentsRecyclerView = view.findViewById(R.id.comments_recycler_view)
@@ -160,14 +160,36 @@ class PlayerStatsFragment : Fragment() {
                 }
             }
         }
-        var isFavourite: Boolean = false
+        var isFavourite: Boolean
 
 
         viewLifecycleOwner.lifecycleScope.launch {
             val favouritesPlayersFlow = viewModel.favouritesPlayers.stateIn(this)
             favouritesPlayersFlow.collect { player ->
                 isFavourite = player.contains(FirebaseUserRaspberry.FavouritePlayers(id))
-
+                if (!isFavourite) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            binding.playerstats.addPlayerToFavsBtn.setBackgroundResource(
+                                R.drawable.button_like
+                            )
+                            binding.playerstats.addPlayerToFavsBtn.setImageResource(
+                                R.drawable.ic_like
+                            )
+                        }
+                    }
+                } else {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            binding.playerstats.addPlayerToFavsBtn.setBackgroundResource(
+                                R.drawable.button_delete
+                            )
+                            binding.playerstats.addPlayerToFavsBtn.setImageResource(
+                                R.drawable.ic_delete
+                            )
+                        }
+                    }
+                }
                 withContext(Dispatchers.Main) {
                     binding.playerstats.addPlayerToFavsBtn.setOnClickListener {
                         if (isFavourite) {
@@ -273,9 +295,9 @@ class PlayerStatsFragment : Fragment() {
     private suspend fun collectRecentMatches() {
         val heroes = viewModel.heroes.first { it.isNotEmpty() }
         viewModel.recentMatches.collect { recentMatches ->
-            matchesAdapter = MatchesAdapter(heroes, recentMatches)
-            matchesRecyclerView.adapter = matchesAdapter
-            matchesAdapter.onItemClick = { item ->
+            recentMatchesAdapter = RecentMatchesAdapter(heroes, recentMatches)
+            recentMatchesRecyclerView.adapter = recentMatchesAdapter
+            recentMatchesAdapter.onItemClick = { item ->
                 val action =
                     PlayerStatsFragmentDirections.actionPlayerStatsFragmentToMatchStatsFragment(item.toString())
                 findNavController().navigate(action)

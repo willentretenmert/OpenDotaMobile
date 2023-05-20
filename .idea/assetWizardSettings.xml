@@ -115,7 +115,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="outputName" value="ic_nevermore" />
+                                      <entry key="outputName" value="ic_launcher3" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -144,7 +144,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Aleksandr\Desktop\devvv\devsources\hero_minimap_icons\SeasonalRank5-5.png" />
+                                                <entry key="imagePath" value="C:\Users\Aleksandr\Downloads\ic_sf_launcher_round.png" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -178,8 +178,8 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Aleksandr\Desktop\devvv\devsources\hero_minimap_icons\SeasonalRank5-5.png" />
-                                      <entry key="outputName" value="ic_rank_legend5" />
+                                      <entry key="imageAsset" value="C:\Users\Aleksandr\Downloads\ic_sf_launcher_round.png" />
+                                      <entry key="outputName" value="ic_launcher3_round" />
                                     </map>
                                   </option>
                                 </PersistentState>

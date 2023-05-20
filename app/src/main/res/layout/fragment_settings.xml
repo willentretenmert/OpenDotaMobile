@@ -7,18 +7,59 @@
     tools:context=".presentation.ui.fragments.SettingsFragment"
     android:background="@color/background">
 
-    <TextView
-        android:id="@+id/username"
+    <LinearLayout
+        android:id="@+id/mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nickname"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02"
-        android:layout_marginTop="200sp"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logged in as: "
+            android:fontFamily="@font/inter"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/edit_nickname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mail"
+            app:layout_constraintVertical_bias="0.02"/>
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_extrabold"
+            android:text="@string/nickname"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/edit_nickname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mail"
+            app:layout_constraintVertical_bias="0.02"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:hint="@string/edit_nickname"
+        android:maxLength="16"
+        android:fontFamily="@font/inter"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
+        android:maxLines="1"
+        android:alpha="0.50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mail" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/editProfile_button"
@@ -34,7 +75,7 @@
         app:backgroundTint="@color/buttonBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/logout_button"

@@ -298,4 +298,40 @@ class RaspberryPiProvider {
         }
     }
 
+    fun postNewProfile(email : String, callback: (Boolean) -> Unit) {
+        if (api != null) {
+            coroutineScope.launch(Dispatchers.IO) {
+                val response = api.postFirebaseProfile(FirebaseUserRaspberry(email, email, emptyList(), emptyList()))
+                if (response.isSuccessful) callback(true)
+                else callback(false)
+            }
+        }
+    }
+    fun updateNickname(
+        userMail: String,
+        nickname: String,
+        callback: (Boolean) -> Unit
+    ) {
+        if (api != null) {
+            coroutineScope.launch(Dispatchers.IO) {
+
+                if (firebaseProfile.value?._firebase_id != null) {
+                    val currentProfile = firebaseProfile.value
+
+                    val updatedProfile = currentProfile?.copy(_name = nickname)
+
+                    val response = api.postFirebaseProfile(updatedProfile!!)
+
+                    if (response.isSuccessful) {
+                        _firebaseProfile.value = updatedProfile
+                        Log.d("zxc", "$userMail set nickname to $nickname $response")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
+    }
 }
+

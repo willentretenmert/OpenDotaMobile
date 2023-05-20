@@ -1,6 +1,8 @@
 package com.example.apiapplication.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.apiapplication.networking.RaspberryPiProvider
 import com.example.apiapplication.presentation.ui.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow

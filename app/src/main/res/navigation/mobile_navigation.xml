@@ -88,7 +88,14 @@
         android:id="@+id/favouritesFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.FavouritesFragment"
         android:label="FavouritesFragment"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_favouritesFragment_to_playerStatsFragment"
+            app:destination="@id/playerStatsFragment" />
+        <action
+            android:id="@+id/action_favouritesFragment_to_matchStatsFragment"
+            app:destination="@id/matchStatsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/matchStatsFragment"
         android:name="com.example.apiapplication.presentation.ui.fragments.MatchStatsFragment"

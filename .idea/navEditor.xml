@@ -13,8 +13,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="12" />
+                            <option name="x" value="354" />
+                            <option name="y" value="196" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -87,6 +87,15 @@
                             <option name="x" value="744" />
                             <option name="y" value="368" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_playerStatsFragment_to_matchStatsFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

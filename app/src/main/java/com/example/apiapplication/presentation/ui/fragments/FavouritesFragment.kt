@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiapplication.R
@@ -65,6 +66,11 @@ class FavouritesFragment : Fragment() {
                     for (item in players) {
                         viewModel.fetchPlayerStats(item.steam_id).collect { // Notice .collect here
                             favouritesPlayersAdapter.updateData(heroes)
+                            favouritesPlayersAdapter.onItemClick = {item ->
+                                val action = FavouritesFragmentDirections.actionFavouritesFragmentToPlayerStatsFragment( item.toString() )
+                                findNavController().navigate(action)
+                            }
+
 
                             val profile = viewModel.playersProfile.first { it != null }
                             val heroStats = viewModel.playersHeroStats.first { it.isNotEmpty() }

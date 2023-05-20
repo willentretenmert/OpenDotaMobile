@@ -19,9 +19,17 @@ class FavouritesPlayersAdapter(
     private var dataSetHeroStats: MutableList<List<PlayersHeroStats>>,
     private var dataSetWinrate: MutableList<PlayersWinrate>
 ) : RecyclerView.Adapter<FavouritesPlayersAdapter.FavouritesPlayersViewHolder>() {
+
+    var onItemClick: ((Int) -> Unit)? = null
     inner class FavouritesPlayersViewHolder(val binding: ItemPlayerstatsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val playerAvatar: ImageView = itemView.findViewById(R.id.user_profile_picture)
+
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(dataSetProfile[adapterPosition].profile?.account_id!!)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesPlayersViewHolder {

@@ -39,16 +39,12 @@ class FavouritesViewModel : ViewModel() {
 
     private val _playersWinrate = MutableStateFlow<PlayersWinrate?>(null)
     val playersWinrate: StateFlow<PlayersWinrate?> = _playersWinrate
-    val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
     private val _matchStats = MutableStateFlow<MatchStats?>(null)
     val matchStats: StateFlow<MatchStats?> = _matchStats
 
     private val _players = MutableStateFlow<List<MatchStats.Player>>(emptyList())
     val players: StateFlow<List<MatchStats.Player>> = _players
 
-    val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
-    val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
-        raspberryPiProvider.steamComments
     val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = raspberryPiProvider.firebaseProfile
     val favouritesPlayers: StateFlow<List<FirebaseUserRaspberry.FavouritePlayers>> =
         raspberryPiProvider.favouritesPlayers
@@ -68,11 +64,6 @@ class FavouritesViewModel : ViewModel() {
     // gets a json string of dota heroes
     fun fetchHeroes() {
         apiProvider.fetchHeroes()
-    }
-
-    // gets a json string of player's matches recent
-    fun fetchRecentMatches(id: CharSequence) {
-        apiProvider.fetchRecentMatches(id)
     }
 
     fun deleteFavouritePlayer(
@@ -136,75 +127,5 @@ class FavouritesViewModel : ViewModel() {
         raspberryPiProvider.fetchFirebaseProfile(mail)
     }
 
-    fun getHeroNameByPlayerStatsIndex(
-        data: List<Hero>,
-        data2: List<PlayersHeroStats>,
-        i: Int
-    ): String {
-        val name = data.firstOrNull { v -> v.id == data2[i].hero_id }?.name ?: ""
-        return "ic_${name}"
-    }
 
-    fun getHeroGames(data: List<PlayersHeroStats>, i: Int): String {
-        return data[i].games.toString()
-    }
-
-    fun getHeroWinrate(data: List<PlayersHeroStats>, i: Int): String {
-        val wins: Int = data[i].win
-        val total: Int = data[i].games
-        return if (total != 0) (wins.toDouble() / total * 100).toInt().toString() + "%" else "0%"
-    }
-
-    // returns player's steam current nickname
-    fun getPlayersPersonaName(data: PlayersProfile?): String {
-        return data?.profile?.personaname ?: ""
-    }
-
-    // returns player's steam profile picture
-    fun getPlayersAvatar(data: PlayersProfile?): String {
-        return data?.profile?.avatarmedium ?: ""
-    }
-
-    // returns player's winrate percentage
-    fun getPlayersWinrate(data: PlayersWinrate?): Int {
-        val wins: Int = data?.win ?: 0
-        val total: Int = wins + (data?.lose ?: 0)
-        return if (total != 0) (wins.toDouble() / total * 100).toInt() else 0
-    }
-
-    // returns player's total matches count
-    fun getPlayersTotal(data: PlayersWinrate?): String {
-        return ((data?.win ?: 0) + (data?.lose ?: 0)).toString()
-    }
-
-    fun getPlayersRank(data: PlayersProfile?): String {
-        return "ic_rank${data?.rank_tier}"
-    }
-
-    fun getMatchStartDate(data: MatchStats?): String {
-        val date = Date((data?.start_time ?: 0) * 1000L)
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        Log.d("zxc", dateFormat.format(date))
-        return dateFormat.format(date)
-    }
-
-    fun getMatchDurationHMS(data: MatchStats?): String {
-        val hours = (data?.duration ?: 0) / 3600
-        val minutes = ((data?.duration ?: 0) % 3600) / 60
-        val seconds = (data?.duration ?: 0) % 60
-        return if (hours > 0) String.format("%d:%02d:%02d", hours, minutes, seconds)
-        else String.format("%02d:%02d", minutes, seconds)
-    }
-
-    fun getOutcome(data: MatchStats?): Boolean? {
-        return data?.radiant_win
-    }
-
-    fun getFirebaseFavouritesPlayers(data: FirebaseUserRaspberry?): List<FirebaseUserRaspberry.FavouritePlayers>? {
-        return data?.players
-    }
-
-    fun getFirebaseFavouritesMatches(data: FirebaseUserRaspberry?): List<FirebaseUserRaspberry.FavouriteMatches>? {
-        return data?.matches
-    }
 }

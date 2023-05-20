@@ -24,9 +24,7 @@ class PlayerStatsViewModel : ViewModel() {
     val playersProfile: StateFlow<PlayersProfile?> = apiProvider.playersProfile
     val playersWinrate: StateFlow<PlayersWinrate?> = apiProvider.playersWinrate
     val recentMatches: StateFlow<List<RecentMatches>> = apiProvider.recentMatches
-    val matchStats: StateFlow<MatchStats?> = apiProvider.matchStats
     val players: StateFlow<List<MatchStats.Player>> = apiProvider.players
-    val steamIDProfile: StateFlow<DotaUserRaspberry?> = raspberryPiProvider.steamIDProfile
     val steamComments: StateFlow<List<DotaUserRaspberry.Comment>> =
         raspberryPiProvider.steamComments
     val firebaseProfile: StateFlow<FirebaseUserRaspberry?> = raspberryPiProvider.firebaseProfile

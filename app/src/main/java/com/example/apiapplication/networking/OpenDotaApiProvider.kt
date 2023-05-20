@@ -59,7 +59,6 @@ class OpenDotaApiProvider {
         .build()
     private val api = retrofit.create(OpenDotaAPI::class.java)
 
-    var gson = GsonBuilder().setLenient().create()
 
     // gets a json string of dota heroes
     fun fetchHeroes() {

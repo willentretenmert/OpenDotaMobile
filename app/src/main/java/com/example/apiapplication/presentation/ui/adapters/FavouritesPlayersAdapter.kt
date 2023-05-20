@@ -103,16 +103,25 @@ class FavouritesPlayersAdapter(
 
     override fun getItemCount() = dataSetProfile.size
 
-    fun updateData(
-        newHero: List<Hero>,
+//    fun updateData(
+//        newHero: List<Hero>,
 //        newProfile: MutableList<PlayersProfile>,
 //        newHeroStats: MutableList<List<PlayersHeroStats>>,
-//        newWinrate: MutableList<PlayersWinrate>
-    ) {
-        this.dataHero = newHero
+////        newWinrate: MutableList<PlayersWinrate>
+//    ) {
+//        clearData()
+//        this.dataHero = newHero
 //        this.dataSetProfile = newProfile
 //        this.dataSetHeroStats = newHeroStats
 //        this.dataSetWinrate = newWinrate
+//        notifyDataSetChanged()
+//    }
+    fun updateData(
+        newHeroes: List<Hero>,
+    ) {
+
+        this.dataHero = newHeroes
+
         notifyDataSetChanged()
     }
 
@@ -136,6 +145,13 @@ class FavouritesPlayersAdapter(
         this.dataSetHeroStats.add(newHeroStats)
         this.dataSetWinrate.add(newWinrate)
         notifyItemInserted(dataSetProfile.size - 1)
+    }
+
+    fun clearData() {
+        dataSetProfile.clear()
+        dataSetHeroStats.clear()
+        dataSetWinrate.clear()
+        notifyDataSetChanged()
     }
 
     private fun getHeroNameByPlayerIndex(

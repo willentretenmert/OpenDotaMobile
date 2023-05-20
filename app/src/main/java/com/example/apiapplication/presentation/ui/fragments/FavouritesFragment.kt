@@ -72,13 +72,30 @@ class FavouritesFragment : Fragment() {
             }
         }
 
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.fetchHeroes()
+//            viewModel.fetchFirebaseProfile(auth.currentUser!!.email.toString())
+//        }
+//        viewLifecycleOwner.lifecycleScope.launch() {
+//            collectFavouritesPlayers()
+//        }
+//        viewLifecycleOwner.lifecycleScope.launch() {
+//            collectFavouritesMatches()
+//        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchHeroes()
             viewModel.fetchFirebaseProfile(auth.currentUser!!.email.toString())
         }
+
         viewLifecycleOwner.lifecycleScope.launch() {
             collectFavouritesPlayers()
         }
+
         viewLifecycleOwner.lifecycleScope.launch() {
             collectFavouritesMatches()
         }
@@ -141,9 +158,7 @@ class FavouritesFragment : Fragment() {
                         viewModel.fetchMatchStats(item.match_id).collect {
                             val players = viewModel.players.first { it.isNotEmpty() }
                             if (players.size >= 10) {
-                                favouritesMatchesAdapter.updateData(
-                                    heroes
-                                )
+                                favouritesMatchesAdapter.updateData(heroes)
                                 val matchStats = viewModel.matchStats.first { it != null }
                                 val playersFromPlayers = viewModel.players.first { it.isNotEmpty() }
                                 val radiantTeam = playersFromPlayers.subList(0, 5)

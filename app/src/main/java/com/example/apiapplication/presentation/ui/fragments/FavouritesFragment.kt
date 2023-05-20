@@ -81,9 +81,9 @@ class FavouritesFragment : Fragment() {
     private suspend fun collectFavouritesPlayers() {
         try {
             val heroes = viewModel.heroes.first { it.isNotEmpty() }
-            viewModel.favouritesPlayers.collect { players ->
-                if (players.isNotEmpty()) {
-                    for (item in players) {
+            viewModel.favouritesPlayers.collect { favouritePlayers ->
+                if (favouritePlayers.isNotEmpty()) {
+                    for (item in favouritePlayers) {
                         viewModel.fetchPlayerStats(item.steam_id).collect {
                             favouritesPlayersAdapter.updateData(
                                 heroes,

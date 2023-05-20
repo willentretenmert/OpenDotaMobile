@@ -72,6 +72,7 @@ class MatchStatsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchHeroes()
             viewModel.fetchMatchStats(id)
+            viewModel.fetchFirebaseProfile(auth.currentUser?.email.toString())
         }
 
 
@@ -133,7 +134,6 @@ class MatchStatsFragment : Fragment() {
         }
 
         var isFavourite: Boolean
-
 
         viewLifecycleOwner.lifecycleScope.launch {
             val favouritesMatchesFlow = viewModel.favouritesMatches.stateIn(this)

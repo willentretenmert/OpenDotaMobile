@@ -22,6 +22,10 @@ class MatchStatsViewModel : ViewModel() {
     val favouritesMatches: StateFlow<List<FirebaseUserRaspberry.FavouriteMatches>> =
         raspberryPiProvider.favouritesMatches
 
+    fun fetchFirebaseProfile(mail: CharSequence) {
+        raspberryPiProvider.fetchFirebaseProfile(mail)
+    }
+
     fun postFavouriteMatch(
         userMail: String,
         nickname: String,

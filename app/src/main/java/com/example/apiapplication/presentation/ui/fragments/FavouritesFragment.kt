@@ -18,6 +18,7 @@ import com.example.apiapplication.presentation.ui.adapters.FavouritesMatchesAdap
 import com.example.apiapplication.presentation.ui.adapters.FavouritesPlayersAdapter
 import com.example.apiapplication.presentation.viewmodel.FavouritesViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -108,9 +109,8 @@ class FavouritesFragment : Fragment() {
                 if (favouritePlayers.isNotEmpty()) {
                     for (item in favouritePlayers) {
                         viewModel.fetchPlayerStats(item.steam_id).collect {
-                            favouritesPlayersAdapter.updateData(
-                                heroes
-                            )
+                            favouritesPlayersAdapter.updateData(heroes)
+//                            favouritesPlayersAdapter.clearData()
                             val profile = viewModel.playersProfile.first { it != null }
                             val heroStats = viewModel.playersHeroStats.first { it.isNotEmpty() }
                             val winrate = viewModel.playersWinrate.first { it != null }
@@ -126,12 +126,14 @@ class FavouritesFragment : Fragment() {
                                     FavouritesFragmentDirections.actionFavouritesFragmentToPlayerStatsFragment(
                                         item.toString()
                                     )
+                                favouritesPlayersAdapter.clearData()
                                 findNavController().navigate(action)
                             }
                             favouritesPlayersAdapter.onItemClick2 = { item ->
                                 viewModel.deleteFavouritePlayer(
                                     auth.currentUser?.email.toString(), nickname, item.toString()
                                 ) { success ->
+                                    favouritesPlayersAdapter.clearData()
                                     Log.d("zxc", "player $item deleted: $success")
                                     if (profile != null && winrate != null) {
                                         favouritesPlayersAdapter.removeData(
@@ -159,6 +161,7 @@ class FavouritesFragment : Fragment() {
                             val players = viewModel.players.first { it.isNotEmpty() }
                             if (players.size >= 10) {
                                 favouritesMatchesAdapter.updateData(heroes)
+//                                favouritesMatchesAdapter.clearData()
                                 val matchStats = viewModel.matchStats.first { it != null }
                                 val playersFromPlayers = viewModel.players.first { it.isNotEmpty() }
                                 val radiantTeam = playersFromPlayers.subList(0, 5)
@@ -174,6 +177,7 @@ class FavouritesFragment : Fragment() {
                                         FavouritesFragmentDirections.actionFavouritesFragmentToMatchStatsFragment(
                                             item.toString()
                                         )
+                                    favouritesMatchesAdapter.clearData()
                                     findNavController().navigate(action)
                                 }
                                 favouritesMatchesAdapter.onItemClick2 = { item ->
@@ -182,6 +186,7 @@ class FavouritesFragment : Fragment() {
                                         nickname,
                                         item.toString()
                                     ) { success ->
+                                        favouritesMatchesAdapter.clearData()
                                         Log.d("zxc", "player $item deleted: $success")
                                         if (matchStats != null) {
                                             favouritesMatchesAdapter.removeData(

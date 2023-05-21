@@ -141,13 +141,13 @@ class FavouritesMatchesAdapter(
         return "ic_${name}"
     }
 
-    fun getMatchStartDate(data: MatchStats?): String {
+    private fun getMatchStartDate(data: MatchStats?): String {
         val date = Date((data?.start_time ?: 0) * 1000L)
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(date)
     }
 
-    fun getMatchDurationHMS(data: MatchStats?): String {
+    private fun getMatchDurationHMS(data: MatchStats?): String {
         val hours = (data?.duration ?: 0) / 3600
         val minutes = ((data?.duration ?: 0) % 3600) / 60
         val seconds = (data?.duration ?: 0) % 60
@@ -155,7 +155,7 @@ class FavouritesMatchesAdapter(
         else String.format("%02d:%02d", minutes, seconds)
     }
 
-    fun getOutcome(data: MatchStats?): Boolean? {
+    private fun getOutcome(data: MatchStats?): Boolean? {
         return data?.radiant_win
     }
 

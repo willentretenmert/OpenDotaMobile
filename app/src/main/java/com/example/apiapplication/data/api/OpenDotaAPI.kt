@@ -14,7 +14,6 @@ interface OpenDotaAPI {
     @GET("heroes")
     suspend fun getHeroes(): Array<Hero>
 
-
     // getting player stats json
     @GET("players/{id}/")
     suspend fun getPlayerProfile(@Path("id") id: CharSequence): PlayersProfile
@@ -27,7 +26,6 @@ interface OpenDotaAPI {
 
     @GET("players/{id}/recentMatches")
     suspend fun getRecentMatches(@Path("id") id: CharSequence): Array<RecentMatches>
-
 
     // getting match stats json
     @GET("matches/{id}")

@@ -20,6 +20,7 @@
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
             android:layout_height="354dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_match_briefing_rv"
             android:id="@+id/favourites_matches_recycler_view" />
         <androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,7 @@
             class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginTop="10dp"
             tools:listitem="@layout/item_playerstats" />
 

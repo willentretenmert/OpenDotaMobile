@@ -36,7 +36,7 @@ class PlayerStatsFragment : Fragment() {
     private lateinit var recentMatchesRecyclerView: RecyclerView
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var commentsRecyclerView: RecyclerView
-
+    private lateinit var nickname: String
     private val auth = MainActivity.User.auth
     private val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.navigation)
 
@@ -60,6 +60,12 @@ class PlayerStatsFragment : Fragment() {
 
         val args: PlayerStatsFragmentArgs by navArgs()
         val id = args.playerId
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.firebaseProfile.collect() { profile ->
+               nickname = profile?._name.toString()
+            }
+        }
 
         recentMatchesRecyclerView = view.findViewById(R.id.matches_recycler_view)
         recentMatchesAdapter = RecentMatchesAdapter(emptyList(), emptyList())
@@ -149,7 +155,7 @@ class PlayerStatsFragment : Fragment() {
         binding.sendBtn.setOnClickListener {
             viewModel.postComment(
                 id,
-                "QWERTY",
+                nickname,
                 binding.editTextNewComment.text.toString()
             ) { success ->
                 if (success) {
@@ -195,7 +201,7 @@ class PlayerStatsFragment : Fragment() {
                         if (isFavourite) {
                             viewModel.deleteFavouritePlayer(
                                 auth.currentUser?.email.toString(),
-                                "QWERTY",
+                                nickname,
                                 id
                             ) { success ->
                                 if (success) {
@@ -217,7 +223,7 @@ class PlayerStatsFragment : Fragment() {
                         } else {
                             viewModel.postFavouritePlayer(
                                 auth.currentUser?.email.toString(),
-                                "QWERTY",
+                                nickname,
                                 id
                             ) { success ->
                                 if (success) {

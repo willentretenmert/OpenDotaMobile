@@ -29,9 +29,10 @@ class FavouritesFragment : Fragment() {
 
     private lateinit var favouritesPlayersAdapter: FavouritesPlayersAdapter
     private lateinit var favouritesPlayersRecyclerView: RecyclerView
-
     private lateinit var favouritesMatchesAdapter: FavouritesMatchesAdapter
+
     private lateinit var favouritesMatchesRecyclerView: RecyclerView
+    private lateinit var nickname: String
 
 
     private val auth = MainActivity.User.auth
@@ -65,6 +66,11 @@ class FavouritesFragment : Fragment() {
             adapter = favouritesMatchesAdapter
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.firebaseProfile.collect() { profile ->
+                nickname = profile?._name.toString()
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchHeroes()
@@ -86,10 +92,7 @@ class FavouritesFragment : Fragment() {
                     for (item in favouritePlayers) {
                         viewModel.fetchPlayerStats(item.steam_id).collect {
                             favouritesPlayersAdapter.updateData(
-                                heroes,
-                                mutableListOf(),
-                                mutableListOf(),
-                                mutableListOf()
+                                heroes
                             )
                             val profile = viewModel.playersProfile.first { it != null }
                             val heroStats = viewModel.playersHeroStats.first { it.isNotEmpty() }
@@ -99,6 +102,7 @@ class FavouritesFragment : Fragment() {
                                 favouritesPlayersAdapter.addData(
                                     profile, heroStats, winrate
                                 )
+                                Log.d("zxc", "player $item displayed")
                             }
                             favouritesPlayersAdapter.onItemClick = { item ->
                                 val action =
@@ -109,16 +113,12 @@ class FavouritesFragment : Fragment() {
                             }
                             favouritesPlayersAdapter.onItemClick2 = { item ->
                                 viewModel.deleteFavouritePlayer(
-                                    auth.currentUser?.email.toString(),
-                                    "QWERTY",
-                                    item.toString()
+                                    auth.currentUser?.email.toString(), nickname, item.toString()
                                 ) { success ->
                                     Log.d("zxc", "player $item deleted: $success")
                                     if (profile != null && winrate != null) {
                                         favouritesPlayersAdapter.removeData(
-                                            profile,
-                                            heroStats,
-                                            winrate
+                                            profile, heroStats, winrate
                                         )
                                     }
                                 }
@@ -142,8 +142,7 @@ class FavouritesFragment : Fragment() {
                             val players = viewModel.players.first { it.isNotEmpty() }
                             if (players.size >= 10) {
                                 favouritesMatchesAdapter.updateData(
-                                    heroes,
-                                    mutableListOf(), mutableListOf(), mutableListOf()
+                                    heroes
                                 )
                                 val matchStats = viewModel.matchStats.first { it != null }
                                 val playersFromPlayers = viewModel.players.first { it.isNotEmpty() }
@@ -165,7 +164,7 @@ class FavouritesFragment : Fragment() {
                                 favouritesMatchesAdapter.onItemClick2 = { item ->
                                     viewModel.deleteFavouriteMatch(
                                         auth.currentUser?.email.toString(),
-                                        "QWERTY",
+                                        nickname,
                                         item.toString()
                                     ) { success ->
                                         Log.d("zxc", "player $item deleted: $success")

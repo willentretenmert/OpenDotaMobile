@@ -10,17 +10,5 @@ import kotlinx.coroutines.launch
 import java.net.URL
 
 class SearchViewModel: ViewModel() {
-    private val gson = Gson()
-    private val _heroes = MutableStateFlow<List<Hero>>(emptyList())
-
-    fun fetchHeroes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val data = gson.fromJson(
-                URL("https://api.opendota.com/api/heroes").readText(),
-                Array<Hero>::class.java
-            )
-            _heroes.value = data.toList()
-        }
-    }
 
 }

@@ -10,7 +10,6 @@ data class FirebaseUserRaspberry(
     @field:SerializedName("players") val players: List<FavouritePlayers>,
 
     @field:SerializedName("matches") val matches: List<FavouriteMatches>
-
 ) {
     data class FavouritePlayers(
         @field:SerializedName("steam_id") val steam_id: String

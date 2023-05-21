@@ -96,14 +96,14 @@ class FavouritesMatchesAdapter(
 
     fun updateData(
         newHeroes: List<Hero>,
-        newMatches: MutableList<MatchStats>,
-        newRadiant: MutableList<List<MatchStats.Player>>,
-        newDire: MutableList<List<MatchStats.Player>>,
+//        newMatches: MutableList<MatchStats>,
+//        newRadiant: MutableList<List<MatchStats.Player>>,
+//        newDire: MutableList<List<MatchStats.Player>>,
     ) {
         this.dataHero = newHeroes
-        this.dataSetMatches = newMatches
-        this.dataSetRadiant = newRadiant
-        this.dataSetDire = newDire
+//        this.dataSetMatches = newMatches
+//        this.dataSetRadiant = newRadiant
+//        this.dataSetDire = newDire
 
         notifyDataSetChanged()
     }

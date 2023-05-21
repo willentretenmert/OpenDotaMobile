@@ -105,14 +105,14 @@ class FavouritesPlayersAdapter(
 
     fun updateData(
         newHero: List<Hero>,
-        newProfile: MutableList<PlayersProfile>,
-        newHeroStats: MutableList<List<PlayersHeroStats>>,
-        newWinrate: MutableList<PlayersWinrate>
+//        newProfile: MutableList<PlayersProfile>,
+//        newHeroStats: MutableList<List<PlayersHeroStats>>,
+//        newWinrate: MutableList<PlayersWinrate>
     ) {
         this.dataHero = newHero
-        this.dataSetProfile = newProfile
-        this.dataSetHeroStats = newHeroStats
-        this.dataSetWinrate = newWinrate
+//        this.dataSetProfile = newProfile
+//        this.dataSetHeroStats = newHeroStats
+//        this.dataSetWinrate = newWinrate
         notifyDataSetChanged()
     }
 

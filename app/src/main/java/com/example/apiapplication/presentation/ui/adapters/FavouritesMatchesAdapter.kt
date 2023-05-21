@@ -1,6 +1,7 @@
 package com.example.apiapplication.presentation.ui.adapters
 
 import android.content.Context
+import android.graphics.RadialGradient
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -96,14 +97,8 @@ class FavouritesMatchesAdapter(
 
     fun updateData(
         newHeroes: List<Hero>,
-//        newMatches: MutableList<MatchStats>,
-//        newRadiant: MutableList<List<MatchStats.Player>>,
-//        newDire: MutableList<List<MatchStats.Player>>,
     ) {
         this.dataHero = newHeroes
-//        this.dataSetMatches = newMatches
-//        this.dataSetRadiant = newRadiant
-//        this.dataSetDire = newDire
 
         notifyDataSetChanged()
     }
@@ -128,6 +123,13 @@ class FavouritesMatchesAdapter(
         this.dataSetRadiant.add(newRadiant)
         this.dataSetDire.add(newDire)
         notifyItemInserted(dataSetMatches.size - 1)
+    }
+
+    fun clearData() {
+        dataSetMatches.clear()
+        dataSetRadiant.clear()
+        dataSetDire.clear()
+        notifyDataSetChanged()
     }
 
     private fun getHeroNameByPlayerIndex(

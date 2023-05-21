@@ -3,7 +3,7 @@ package com.example.apiapplication.data.models
 import com.google.gson.annotations.SerializedName
 
 data class PlayersProfile(
-    @field:SerializedName("rank_tier") val rank_tier: Int,
+    @field:SerializedName("rank_tier") val rank_tier: Int?,
 
     @field:SerializedName("profile") var profile: Profile?
 ) {

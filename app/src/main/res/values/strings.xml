@@ -13,9 +13,11 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="log_out">Log out</string>
     <string name="btn_login">Log in</string>
+    <string name="btn_minilogin"><u>Log in</u></string>
     <string name="btn_sign_up">Sign up</string>
-    <string name="tv_first_time">First time?</string>
-    <string name="tv_signup_quote">Already have account?</string>
+    <string name="btn_minisign_up"><u>Sign up</u></string>
+    <string name="tv_first_time">First time with us?</string>
+    <string name="tv_signup_quote">Already have an account?</string>
     <string name="menu_search">Search</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_favs">Favourites</string>

@@ -102,6 +102,7 @@ class PlayerStatsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             collectPlayerProfile { playerStatsNickname, playersRank ->
                 binding.playerstats.playerstatsNickname.text = playerStatsNickname
+                Log.d("zxc", "$playerStatsNickname steamid is $id")
                 val resId = resources.getIdentifier(playersRank, "mipmap", context?.packageName)
                 binding.playerstats.playerstatsRank.setImageResource(resId)
             }

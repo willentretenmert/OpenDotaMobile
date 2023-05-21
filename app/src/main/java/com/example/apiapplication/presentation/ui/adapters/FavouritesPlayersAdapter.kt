@@ -185,6 +185,8 @@ class FavouritesPlayersAdapter(
     }
 
     private fun getPlayersRank(data: PlayersProfile?): String {
-        return "ic_rank${data?.rank_tier}"
+        return if (data?.rank_tier != null)
+            "ic_rank${data.rank_tier}"
+        else "ic_rank00"
     }
 }

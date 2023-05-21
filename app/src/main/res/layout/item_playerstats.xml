@@ -1,8 +1,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:backgroundTint="@color/itemBackground2"
-    android:layout_height="180dp"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:backgroundTint="@color/itemBackground2"
     app:cardCornerRadius="14dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
@@ -10,74 +10,90 @@
     app:contentPaddingRight="8dp">
 
     <androidx.cardview.widget.CardView
-        android:backgroundTint="@color/gray"
-        android:layout_gravity="center|top"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="6dp"
+        android:backgroundTint="@color/background"
         android:textAlignment="center"
         app:cardCornerRadius="10dp">
 
         <TextView
             android:id="@+id/playerstats_nickname"
-            android:fontFamily="@font/inter_extrabold"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/inter"
             android:text=""
-            android:textColor="@color/white" />
+            android:textColor="@color/light_gray" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:gravity="center"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:gravity="center|bottom"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:paddingTop="5dp">
 
         <include
             android:id="@+id/profile_briefing"
-            layout="@layout/item_profile_briefing" />
+            layout="@layout/item_profile_briefing"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_margin="6dp"
+            android:layout_weight="1.3" />
 
         <include
             android:id="@+id/hero1"
-            layout="@layout/item_hero_stats" />
+            layout="@layout/item_hero_stats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/hero2"
-            layout="@layout/item_hero_stats" />
+            layout="@layout/item_hero_stats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/hero3"
-            layout="@layout/item_hero_stats" />
+            layout="@layout/item_hero_stats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_weight="1" />
 
-        <androidx.cardview.widget.CardView
-            android:backgroundTint="@color/itemBackground1"
-            android:layout_height="72dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="2dp"
-            android:layout_width="72dp"
-            app:cardCornerRadius="100dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:layout_weight="1.4"
+            android:gravity="center|bottom"
+            android:layout_marginBottom="6dp"
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_margin="8dp"
                 android:id="@+id/playerstats_rank"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:background="@drawable/ic_rank_background" />
 
+            <ImageButton
+                android:id="@+id/add_player_to_favs_btn"
+                android:layout_marginTop="16dp"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_like"
+                android:src="@drawable/ic_like" />
+        </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
-
-    <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/add_player_to_favs_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="6dp"
-        android:layout_marginEnd="6dp"
-        android:background="@drawable/button_like"
-        android:src="@drawable/ic_like" />
 
 
 </androidx.cardview.widget.CardView>
